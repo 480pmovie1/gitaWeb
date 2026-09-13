@@ -1,469 +1,1383 @@
 <!DOCTYPE html>
-
 <html lang="hi">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=1000"> <title>स्मार्ट हिंदी घोषणा पत्र - डेस्कटॉप मोड</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Dekko&family=Tillana:wght@400;700&family=Kurale&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-
-
-    <style>
-
-        :root {
-
-            --input-font-size: 19.5px;
-
-            --content-font-size: 19px;
-
-            --line-height-val: 2;
-
-        }
-
-
-
-        /* बॉडी को हमेशा डेस्कटॉप विड्थ पर रखना */
-
-        body {
-
-            font-family: 'Noto Sans Devanagari', sans-serif;
-
-            background-color: #444;
-
-            display: flex;
-
-            flex-direction: column;
-
-            align-items: center;
-
-            padding: 20px;
-
-            margin: 0;
-
-            min-width: 900px; /* मोबाइल पर सिकोड़ने से रोकता है */
-
-        }
-
-
-
-        .controls {
-
-            background: #fff; padding: 15px; border-radius: 8px;
-
-            margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-
-            display: flex; gap: 15px; align-items: center;
-
-            width: 850px; justify-content: center;
-
-        }
-
-
-
-        .form-container {
-
-            background-color: #fff; 
-
-            width: 850px; 
-
-            min-height: 550px;
-
-            padding: 50px 70px;
-
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
-
-            line-height: var(--line-height-val); 
-
-            color: #111;
-
-            box-sizing: border-box;
-
-            position: relative;
-
-        }
-
-
-
-        .input-wrapper {
-
-            display: inline-flex;
-
-            position: relative;
-
-            border-bottom: 3px dotted #000;
-
-            line-height: 1;
-
-            margin: 0 2px;
-
-            height: 30px; 
-
-            align-items: flex-end; 
-
-            justify-content: center;
-
-            vertical-align: middle;
-
-        }
-
-
-
-        .auto-width-wrapper {
-
-            min-width: 50px;
-
-            display: inline-grid;
-
-            align-items: flex-end;
-
-        }
-
-        
-
-        .auto-width-wrapper input { grid-area: 1/1; width: 100%; }
-
-
-
-        .input-field {
-
-            font-family: 'Kurale', serif; 
-
-            border: none;
-
-            background: transparent;
-
-            font-size: var(--input-font-size);
-
-            color: #1a237e;
-
-            outline: none;
-
-            text-align: center;
-
-            padding: 0 5px;
-
-            letter-spacing: 0.8px;
-
-            word-spacing: 4px;
-
-        }
-
-
-
-        .temp-text {
-
-            font-size: var(--input-font-size);
-
-            color: #1a237e;
-
-            text-align: center;
-
-            padding-bottom: 1px;
-
-            white-space: nowrap;
-
-            letter-spacing: 1px;
-
-            word-spacing: 5px;
-
-        }
-
-
-
-        h2 { text-align: center; text-decoration: underline; margin-bottom: 5px; font-size: 26px; line-height: 1.2; }
-
-        h3 { text-align: center; margin-bottom: 15px; font-size: 19px; line-height: 1.2; }
-
-        .content { text-align: justify; font-size: var(--content-font-size); }
-
-
-
-        .footer { margin-top: 35px; display: flex; justify-content: space-between; align-items: flex-end; }
-
-        #auto-sig { font-size: 20px; color: #1a237e; letter-spacing: 1px; }
-
-
-
-        /* रिस्पॉन्सिव स्केलिंग हटा दी गई है ताकि यह हमेशा डेस्कटॉप मोड में रहे */
-
-        
-
-        @media print { 
-
-            .controls { display: none; } 
-
-            body { background: none; min-width: auto; } 
-
-            .form-container { box-shadow: none; padding: 20px; } 
-
-        }
-
-    </style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Billing & Auto-Sequential Khata Register</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #0b1329;
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px;
+      min-height: 100vh;
+      gap: 16px;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      color: #38bdf8;
+      text-align: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: #1e293b;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Video & Canvas Frame */
+    .media-box {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    video, canvas {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    canvas {
+      display: none;
+    }
+
+    .btn {
+      background: #38bdf8;
+      color: #0f172a;
+      font-weight: 700;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.2s;
+      width: 100%;
+      text-align: center;
+    }
+
+    .btn:hover {
+      background: #0284c7;
+      color: #fff;
+    }
+
+    .btn-download {
+      background: #22c55e;
+      color: white;
+      margin-top: 4px;
+    }
+
+    .btn-download:hover {
+      background: #16a34a;
+    }
+
+    .btn-retake {
+      background: #ef4444;
+      color: white;
+    }
+
+    .btn-retake:hover {
+      background: #dc2626;
+    }
+
+    .btn-shortcut {
+      background: #334155;
+      color: #94a3b8;
+      font-size: 0.78rem;
+      padding: 5px 8px;
+      border-radius: 6px;
+      border: 1px solid #475569;
+      cursor: pointer;
+      transition: 0.2s;
+      font-weight: 600;
+    }
+
+    .btn-shortcut:hover {
+      background: #475569;
+      color: #fff;
+    }
+
+    .btn-step-id {
+      background: #0284c7;
+      color: white;
+      border: none;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn-step-id:hover {
+      background: #0369a1;
+    }
+
+    .btn-edit-name {
+      background: #0284c7;
+      color: white;
+      border: none;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      cursor: pointer;
+      margin-left: 4px;
+    }
+
+    .inputs-container {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .col {
+      flex: 1;
+    }
+
+    label {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin-bottom: 3px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 9px 10px;
+      border-radius: 6px;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 0.92rem;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #38bdf8;
+    }
+
+    /* लॉक किया हुआ इनपुट (Read-Only) */
+    input[readonly] {
+      background: #1a2234 !important;
+      color: #38bdf8 !important;
+      border-color: #1e3a8a !important;
+      cursor: not-allowed;
+      font-weight: bold;
+    }
+
+    /* Previous Due Alert Box */
+    .prev-due-alert {
+      background: #450a0a;
+      border: 1px solid #ef4444;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      color: #fca5a5;
+    }
+
+    .btn-clear-due {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 5px 9px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .shortcuts-bar {
+      display: flex;
+      gap: 6px;
+      justify-content: flex-end;
+      margin-top: -4px;
+      margin-bottom: 2px;
+    }
+
+    /* Status Card */
+    .status-card {
+      padding: 10px 14px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    .status-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: #94a3b8;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 4px;
+    }
+
+    .status-body {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.05rem;
+    }
+
+    .card-change { background: #064e3b; border: 1.5px solid #10b981; color: #34d399; }
+    .card-due { background: #450a0a; border: 1.5px solid #ef4444; color: #f87171; }
+    .card-exact { background: #0c4a6e; border: 1.5px solid #38bdf8; color: #38bdf8; }
+
+    .or-divider {
+      color: #64748b;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
+    #fileInput { display: none; }
+
+    /* Auto-Next Switch Styling */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #0f172a;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      margin-top: 2px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #334155;
+      transition: .3s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #10b981;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    /* Dashboard */
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 8px;
+    }
+
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 4px;
+    }
+
+    .filter-btn {
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #94a3b8;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .filter-btn.active {
+      background: #38bdf8;
+      color: #0f172a;
+      border-color: #38bdf8;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .metric-card {
+      background: #0f172a;
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #334155;
+    }
+
+    .metric-label { font-size: 0.78rem; color: #94a3b8; margin-bottom: 2px; }
+    .metric-value { font-size: 1.25rem; font-weight: 800; }
+    .metric-cash { border-left: 4px solid #10b981; }
+    .metric-cash .metric-value { color: #34d399; }
+    .metric-online { border-left: 4px solid #818cf8; }
+    .metric-online .metric-value { color: #a5b4fc; }
+    .metric-total { border-left: 4px solid #38bdf8; }
+    .metric-total .metric-value { color: #38bdf8; }
+    .metric-due { border-left: 4px solid #ef4444; }
+    .metric-due .metric-value { color: #f87171; }
+
+    /* Detailed History Cards */
+    .history-section {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .history-list {
+      max-height: 280px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .history-item {
+      background: #0f172a;
+      padding: 10px 12px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      border: 1px solid #334155;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .history-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 6px;
+    }
+
+    .history-cust-title {
+      font-weight: 700;
+      color: #f8fafc;
+      font-size: 0.92rem;
+    }
+
+    .history-time {
+      font-size: 0.74rem;
+      color: #64748b;
+      margin-top: 1px;
+    }
+
+    .history-badges-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 2px;
+    }
+
+    .h-badge {
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .h-badge-bill { background: #172554; color: #93c5fd; border: 1px solid #2563eb; }
+    .h-badge-online { background: #1e1b4b; color: #c7d2fe; border: 1px solid #6366f1; }
+    .h-badge-cash { background: #064e3b; color: #6ee7b7; border: 1px solid #10b981; }
+    .h-badge-split { background: #312e81; color: #e0e7ff; border: 1px solid #818cf8; }
+    .h-badge-due { background: #450a0a; color: #fca5a5; border: 1px solid #ef4444; }
+    .h-badge-change { background: #064e3b; color: #6ee7b7; border: 1px solid #10b981; }
+    .h-badge-paid { background: #0c4a6e; color: #7dd3fc; border: 1px solid #0284c7; }
+
+    .history-sub-text {
+      font-size: 0.76rem;
+      color: #94a3b8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-del {
+      background: transparent;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 2px 4px;
+    }
+  </style>
 </head>
-
 <body>
 
+  <h1>📸 Smart Billing & Locked Khata Register</h1>
 
-
-<div class="controls">
-
-    <div><strong>Font:</strong>
-
-    <select id="fontChanger" onchange="updateStyle()">
-
-        <option value="'Kalam', cursive">लिखावट 1</option>
-
-        <option value="'Dekko', cursive">लिखावट 2</option>
-
-        <option value="'Tillana', cursive">लिखावट 3</option>
-
-        <option value="'Kurale', serif" selected>लिखावट 4</option>
-
-    </select></div>
-
-    <div><strong>Style:</strong>
-
-    <select id="styleChanger" onchange="updateStyle()">
-
-        <option value="normal">Normal</option>
-
-        <option value="italic">Italic</option>
-
-    </select></div>
-
-    <button onclick="downloadJPG()" style="background:#28a745; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; font-weight:bold;">Download HQ (658x487)</button>
-
-</div>
-
-
-
-<div id="capture-area" class="form-container">
-
-    <div style="display: flex; justify-content: space-between; line-height: 1.2; margin-bottom: 25px;">
-
-        <div>प्रमाण पत्र बनवाने का कारण: <div class="input-wrapper" style="width: 250px;"><input type="text" id="reason" list="reason-list" class="input-field" value="शिक्षण संस्थान में प्रवेश"></div></div>
-
-        <div>आधार न. <div class="input-wrapper" style="width: 200px;"><input type="text" id="aadhar" class="input-field" maxlength="14" placeholder="XXXX-XXXX-XXXX"></div></div>
-
+  <!-- 1. CAMERA & BILLING FORM -->
+  <div class="container">
+    <div class="media-box">
+      <video id="video" autoplay playsinline></video>
+      <canvas id="canvas"></canvas>
     </div>
 
+    <button class="btn" id="captureBtn">📷 Photo Click Karein</button>
+    <div class="or-divider">── ya ──</div>
+    <label for="fileInput" class="btn" style="background: #334155; color: white;">📁 Gallery Se Upload Karein</label>
+    <input type="file" id="fileInput" accept="image/*">
 
-
-    <h2><u>स्वप्रमाणित घोषणा पत्र</u></h2>
-
-    <h3>आय/जाति/निवास प्रमाण - पत्र हेतु</h3>
-
-
-
-    <div class="content">
-
-        मैं <div class="input-wrapper" style="width: 200px;"><input type="text" id="main-name" class="input-field" oninput="syncSignature()"></div> 
-
-        पुत्र/पुत्री पति श्री <div class="input-wrapper" style="width: 180px;"><input type="text" id="father" class="input-field"></div> 
-
-        माता श्रीमती <div class="input-wrapper" style="width: 180px;"><input type="text" id="mother" class="input-field"></div> 
-
-        जन्म तिथि <div class="input-wrapper" style="width: 130px;"><input type="text" id="dob" class="input-field"></div> 
-
-        व्यवसाय: <div class="input-wrapper" style="width: 120px;"><input type="text" id="job" list="job-list" class="input-field"></div>
-
-        जन्म स्थान <div class="input-wrapper" style="width: 150px;"><input type="text" id="birth-place" class="input-field"></div> 
-
-        
-
-        जाति <div class="input-wrapper auto-width-wrapper"><input type="text" id="caste" list="caste-list" class="input-field" oninput="this.parentElement.style.width = (this.value.length + 1) + 'ch'"></div> 
-
-        उपजाति <div class="input-wrapper auto-width-wrapper"><input type="text" id="subcaste" class="input-field" oninput="this.parentElement.style.width = (this.value.length + 1) + 'ch'"></div> 
-
-        
-
-        निवास <div class="input-wrapper" style="width: 300px;"><input type="text" id="address" class="input-field"></div> 
-
-        थाना <div class="input-wrapper" style="width: 130px;"><input type="text" id="thana" class="input-field"></div> 
-
-        तहसील <div class="input-wrapper" style="width: 130px;"><input type="text" id="tehsil" class="input-field"></div> 
-
-        जिला <div class="input-wrapper" style="width: 130px;"><input type="text" id="district" class="input-field"></div> 
-
-        घोषणा करता/करती हूँ कि आवेदन पत्र में दिए गये विवरण तथ्य एवं मेरी जानकारी विश्वास में शुद्ध एवं सत्य है, मैं मिथ्या/विवरण तथ्यों को देने के परिणामों से भलीभांति अवगत हूँ! यदि आवेदन पत्र में दिए गये कोई विवरण/थ्य मिथ्या पाए जाते हैं, तो मेरे विरुद्ध भा.द.वि. 1860 की धारा - 199 व 200 एवं प्रभावी किसी अन्य विधि के अंतर्गत अभियोजन एवं दण्ड के लिए स्वयं उत्तर दायी होऊंगा/होऊंगी।
-
-    </div>
-
-
-
-    <div class="footer">
-
-        <div>
-
-            स्थान <div class="input-wrapper" style="width: 140px;"><input type="text" id="loc-place" class="input-field"></div><br>
-
-            दिनांक <div class="input-wrapper" style="width: 140px;"><input type="text" id="current-date" class="input-field"></div>
-
+    <!-- Form Section -->
+    <div class="inputs-container" id="inputsContainer">
+      
+      <!-- Customer Info with Auto-Step Next/Prev -->
+      <div class="row">
+        <div class="col">
+          <label>
+            <span>Customer ID / No:</span>
+            <span>
+              <button type="button" class="btn-step-id" id="btnPrevId" title="पिछला ID">◀</button>
+              <button type="button" class="btn-step-id" id="btnNextId" title="अगला ID">▶</button>
+            </span>
+          </label>
+          <input type="text" id="custNumber" placeholder="e.g. 1">
         </div>
-
-        <div style="text-align: right;">
-
-            आवेदक के हस्ताक्षर <div class="input-wrapper" style="width: 180px; border:none;"><span id="auto-sig"></span></div><br>
-
-            मोबाईल न. <div class="input-wrapper" style="width: 160px;"><input type="text" id="mobile" class="input-field"></div><br>
-
-            वार्षिक आय <div class="input-wrapper" style="width: 110px; border:none;"><input type="text" id="income" class="input-field" value="46,000"></div>
-
+        <div class="col">
+          <label>
+            <span>Customer Name:</span>
+            <span id="nameStatusBadge"></span>
+          </label>
+          <input type="text" id="custName" placeholder="Name">
         </div>
+      </div>
 
+      <!-- Live Previous Due Alert -->
+      <div id="prevDueAlert" class="prev-due-alert">
+        <span>⚠️ पिछला बकाया: <b id="prevDueVal">₹ 0</b></span>
+        <button type="button" class="btn-clear-due" id="btnSettleOldDue">पुराना बकाया भरें</button>
+      </div>
+
+      <div>
+        <label>Date & Time:</label>
+        <input type="datetime-local" id="dateTimeInput">
+      </div>
+
+      <!-- Bill & Old Due Inputs (With Fixed Price Indicator) -->
+      <div class="row">
+        <div class="col">
+          <label>
+            <span>आज का नया बिल (₹):</span>
+            <span id="priceBadge"></span>
+          </label>
+          <input type="number" id="billAmount" placeholder="0" value="">
+        </div>
+        <div class="col">
+          <label>पिछला बकाया जुड़ा (₹):</label>
+          <input type="number" id="prevDueInput" placeholder="0" value="0">
+        </div>
+      </div>
+
+      <div class="shortcuts-bar">
+        <button type="button" class="btn-shortcut" id="btnFullCash">⚡ पूरा Cash</button>
+        <button type="button" class="btn-shortcut" id="btnFullOnline">⚡ पूरा UPI/ATM</button>
+        <button type="button" class="btn-shortcut" id="btnClearRecv">🔄 Reset 0</button>
+      </div>
+
+      <!-- Cash & Online Inputs -->
+      <div class="row">
+        <div class="col">
+          <label>💵 कैश प्राप्त (Cash ₹):</label>
+          <input type="number" id="cashAmount" placeholder="0" value="0">
+        </div>
+        <div class="col">
+          <label>📱 ऑनलाइन प्राप्त (UPI ₹):</label>
+          <input type="number" id="onlineAmount" placeholder="0" value="0">
+        </div>
+      </div>
+
+      <!-- Status Card -->
+      <div id="statusCard" class="status-card card-exact">
+        <div class="status-header">
+          <span>कुल प्राप्त: <b id="totalRecvLabel" style="color:#fff;">₹ 0.00</b></span>
+          <span id="payableBadge">कुल देनदारी: ₹0</span>
+        </div>
+        <div class="status-body">
+          <span id="statusTitle">स्थिति:</span>
+          <span id="statusValue">✅ पूरा भुगतान (₹ 0 बाकी)</span>
+        </div>
+      </div>
+
+      <!-- Auto-Next Switch -->
+      <div class="toggle-row">
+        <span style="font-size: 0.83rem; color: #cbd5e1;">⚡ डाउनलोड के बाद ऑटो नया बिल:</span>
+        <label class="switch">
+          <input type="checkbox" id="autoNextBillToggle">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <button class="btn btn-download" id="downloadBtn">⬇️ Save & Download Photo</button>
+      <button class="btn btn-retake" id="retakeBtn">🔄 नया बिल / Dobara Click Karein</button>
+    </div>
+  </div>
+
+  <!-- 2. COLLECTION DASHBOARD -->
+  <div class="container">
+    <div class="dashboard-header">
+      <h2 style="font-size:1.15rem;">📊 कलेक्शन बहीखाता</h2>
+      <button class="btn-shortcut" id="btnClearAllHistory" style="color:#f87171;">🗑️ Clear Data</button>
     </div>
 
-</div>
-
-
-
-<datalist id="reason-list"><option value="छात्रवृत्ति हेतु"><option value="शिक्षण संस्थान में प्रवेश हेतु"><option value="सरकारी भर्ती हेतु"></datalist>
-
-<datalist id="job-list"><option value="कृषि"><option value="मजदूरी"><option value="छात्र"></datalist>
-
-<datalist id="caste-list"><option value="पिछली जाति"><option value="सामान्य जाति"><option value="अनुसूचित जाति"></datalist>
-
-
-
-<script>
-
-    function updateStyle() {
-
-        const font = document.getElementById('fontChanger').value;
-
-        const style = document.getElementById('styleChanger').value;
-
-        document.querySelectorAll('.input-field').forEach(f => {
-
-            f.style.fontFamily = font;
-
-            f.style.fontStyle = style;
-
-        });
-
-        const sig = document.getElementById('auto-sig');
-
-        sig.style.fontFamily = font;
-
-        sig.style.fontStyle = style;
-
-        localStorage.setItem('selectedFont', font);
-
-        localStorage.setItem('selectedStyle', style);
-
-    }
-
-
-
-    function syncSignature() {
-
-        document.getElementById('auto-sig').innerText = document.getElementById('main-name').value;
-
-    }
-
-
-
-    function downloadJPG() {
-
-        const userName = document.getElementById('main-name').value || "User";
-
-        const area = document.getElementById('capture-area');
-
-
-
-        html2canvas(area, { 
-
-            scale: 3, 
-
-            useCORS: true,
-
-            backgroundColor: "#ffffff",
-
-            onclone: (clonedDoc) => {
-
-                const inputs = clonedDoc.querySelectorAll('.input-field');
-
-                inputs.forEach(input => {
-
-                    const wrapper = input.parentElement;
-
-                    const textSpan = clonedDoc.createElement('span');
-
-                    textSpan.innerText = input.value;
-
-                    textSpan.className = 'temp-text';
-
-                    textSpan.style.fontFamily = input.style.fontFamily;
-
-                    textSpan.style.fontStyle = input.style.fontStyle;
-
-                    input.style.display = 'none';
-
-                    wrapper.appendChild(textSpan);
-
-                });
-
-            }
-
-        }).then(canvas => {
-
-            const resizedCanvas = document.createElement('canvas');
-
-            resizedCanvas.width = 658;
-
-            resizedCanvas.height = 487;
-
-            const ctx = resizedCanvas.getContext('2d');
-
-            ctx.imageSmoothingEnabled = true;
-
-            ctx.imageSmoothingQuality = 'high';
-
-            ctx.drawImage(canvas, 0, 0, 658, 487);
-
-
-
-            const link = document.createElement('a');
-
-            link.download = userName + "_declaration.jpg";
-
-            link.href = resizedCanvas.toDataURL("image/jpeg", 0.92);
-
-            link.click();
-
-        });
-
-    }
-
-
-
-    window.onload = function() {
-
-        const t = new Date();
-
-        document.getElementById('current-date').value = t.toLocaleDateString('hi-IN');
-
-        const savedFont = localStorage.getItem('selectedFont') || "'Kurale', serif";
-
-        const savedStyle = localStorage.getItem('selectedStyle') || "normal";
-
-        document.getElementById('fontChanger').value = savedFont;
-
-        document.getElementById('styleChanger').value = savedStyle;
-
-        updateStyle();
-
+    <div class="filter-bar">
+      <button class="filter-btn active" id="filterToday">आज (Today)</button>
+      <button class="filter-btn" id="filterAll">सभी (All)</button>
+      <input type="date" id="customDatePicker" style="padding: 5px 8px; font-size: 0.82rem; width: auto; flex:1;">
+    </div>
+
+    <div class="metrics-grid">
+      <div class="metric-card metric-cash">
+        <span class="metric-label">💵 कुल कैश प्राप्त</span>
+        <span class="metric-value" id="dashTotalCash">₹ 0</span>
+      </div>
+      <div class="metric-card metric-online">
+        <span class="metric-label">📱 कुल UPI / ATM</span>
+        <span class="metric-value" id="dashTotalOnline">₹ 0</span>
+      </div>
+      <div class="metric-card metric-total">
+        <span class="metric-label">💰 कुल कलेक्शन (Total)</span>
+        <span class="metric-value" id="dashGrandTotal">₹ 0</span>
+      </div>
+      <div class="metric-card metric-due">
+        <span class="metric-label" id="dashDueLabel">⚠️ आज का बकाया</span>
+        <span class="metric-value" id="dashTotalDue">₹ 0</span>
+      </div>
+    </div>
+
+    <div class="history-section">
+      <div style="font-size:0.85rem; color:#94a3b8;">लेनदेन विवरण (<span id="historyCount">0</span> बिल)</div>
+      <div class="history-list" id="historyList"></div>
+    </div>
+  </div>
+
+  <script>
+    // 1. मास्टर कस्टमर डायरेक्टरी
+    const initialMasterDirectory = {
+      "101": "राहुल कुमार",
+      "102": "अमित सिंह",
+      "103": "विकास वर्मा",
+      "106": "Suraj samosha",
+      "107": "Suraj samosha",
+      "9": "Mitha wala 3"
     };
 
-</script>
+    function getMasterDirectory() {
+      let master = JSON.parse(localStorage.getItem('smart_master_customers_v3') || '{}');
+      if (Object.keys(master).length === 0) {
+        master = { ...initialMasterDirectory };
+      }
+      
+      const records = getBillingRecords();
+      records.forEach(r => {
+        if (r.number && r.name && !r.name.startsWith('Customer-') && r.name !== 'Customer') {
+          if (!master[r.number]) {
+            master[r.number] = r.name;
+          }
+        }
+      });
 
+      localStorage.setItem('smart_master_customers_v3', JSON.stringify(master));
+      return master;
+    }
+
+    function saveMasterDirectory(dir) {
+      localStorage.setItem('smart_master_customers_v3', JSON.stringify(dir));
+    }
+
+    // =========================================================================
+    // ग्राहक की तय कीमत (Fixed Price) की मेमोरी
+    // =========================================================================
+    const initialMasterPrices = {
+      "101": 240,
+      "102": 280,
+      "103": 500,
+      "106": 180,
+      "107": 180,
+      "9": 1200
+    };
+
+    function getMasterPrices() {
+      let prices = JSON.parse(localStorage.getItem('smart_master_prices_v3') || '{}');
+      if (Object.keys(prices).length === 0) {
+        prices = { ...initialMasterPrices };
+      }
+      // पुरानी हिस्ट्री से भी तय कीमतें निकाल लें
+      const records = getBillingRecords();
+      records.forEach(r => {
+        if (r.number && r.todayBill && !prices[r.number]) {
+          prices[r.number] = r.todayBill;
+        }
+      });
+      localStorage.setItem('smart_master_prices_v3', JSON.stringify(prices));
+      return prices;
+    }
+
+    function saveMasterPrices(prices) {
+      localStorage.setItem('smart_master_prices_v3', JSON.stringify(prices));
+    }
+
+    // DOM Elements
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const captureBtn = document.getElementById('captureBtn');
+    const inputsContainer = document.getElementById('inputsContainer');
+    const custNumber = document.getElementById('custNumber');
+    const custName = document.getElementById('custName');
+    const nameStatusBadge = document.getElementById('nameStatusBadge');
+    const priceBadge = document.getElementById('priceBadge');
+    const btnPrevId = document.getElementById('btnPrevId');
+    const btnNextId = document.getElementById('btnNextId');
+    const prevDueAlert = document.getElementById('prevDueAlert');
+    const prevDueVal = document.getElementById('prevDueVal');
+    const btnSettleOldDue = document.getElementById('btnSettleOldDue');
+    const dateTimeInput = document.getElementById('dateTimeInput');
+    const billAmount = document.getElementById('billAmount');
+    const prevDueInput = document.getElementById('prevDueInput');
+    const cashAmount = document.getElementById('cashAmount');
+    const onlineAmount = document.getElementById('onlineAmount');
+    const btnFullCash = document.getElementById('btnFullCash');
+    const btnFullOnline = document.getElementById('btnFullOnline');
+    const btnClearRecv = document.getElementById('btnClearRecv');
+    const statusCard = document.getElementById('statusCard');
+    const totalRecvLabel = document.getElementById('totalRecvLabel');
+    const payableBadge = document.getElementById('payableBadge');
+    const statusTitle = document.getElementById('statusTitle');
+    const statusValue = document.getElementById('statusValue');
+    const autoNextBillToggle = document.getElementById('autoNextBillToggle');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const retakeBtn = document.getElementById('retakeBtn');
+    const fileInput = document.getElementById('fileInput');
+
+    const dashTotalCash = document.getElementById('dashTotalCash');
+    const dashTotalOnline = document.getElementById('dashTotalOnline');
+    const dashGrandTotal = document.getElementById('dashGrandTotal');
+    const dashDueLabel = document.getElementById('dashDueLabel');
+    const dashTotalDue = document.getElementById('dashTotalDue');
+    const historyList = document.getElementById('historyList');
+    const historyCount = document.getElementById('historyCount');
+    const filterToday = document.getElementById('filterToday');
+    const filterAll = document.getElementById('filterAll');
+    const customDatePicker = document.getElementById('customDatePicker');
+    const btnClearAllHistory = document.getElementById('btnClearAllHistory');
+
+    let capturedImage = null;
+    let currentFilterMode = "TODAY";
+
+    function getBillingRecords() {
+      return JSON.parse(localStorage.getItem('smart_billing_records') || '[]');
+    }
+
+    function saveBillingRecords(records) {
+      localStorage.setItem('smart_billing_records', JSON.stringify(records));
+      renderDashboard();
+    }
+
+    function getCustomerDueOnly(number) {
+      if (!number) return 0;
+      const records = getBillingRecords();
+      let balance = 0;
+      records.forEach(r => {
+        if (r.number === number) {
+          balance += (r.due || 0);
+          balance -= (r.settledOldDue || 0);
+        }
+      });
+      return Math.max(0, balance);
+    }
+
+    async function startCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 960 } }
+        });
+        video.srcObject = stream;
+      } catch (err) {
+        console.warn("Camera start error: ", err);
+      }
+    }
+
+    function setDefaultDateTime() {
+      const now = new Date();
+      now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+      dateTimeInput.value = now.toISOString().slice(0, 16);
+    }
+
+    // =========================================================================
+    // ग्राहक का डेटा (नाम + तय कीमत + बकाया) लोड करने का मास्टर फंक्शन
+    // =========================================================================
+    function loadCustomerData(id) {
+      const master = getMasterDirectory();
+      const prices = getMasterPrices();
+
+      if (id) {
+        // 1. नाम ढूंढना और लॉक करना
+        if (master[id]) {
+          custName.value = master[id];
+          custName.readOnly = true;
+          nameStatusBadge.innerHTML = `
+            <span style="color:#10b981; font-weight:bold; font-size:0.75rem;">🔒 फिक्स</span>
+            <button type="button" class="btn-edit-name" id="btnUnlockName">✏️ बदलें</button>
+          `;
+          const btn = document.getElementById('btnUnlockName');
+          if (btn) btn.addEventListener('click', unlockNameForEdit);
+        } else {
+          custName.value = '';
+          custName.readOnly = false;
+          nameStatusBadge.innerHTML = `<span style="color:#38bdf8; font-weight:bold; font-size:0.75rem;">✍️ नया</span>`;
+        }
+
+        // 2. तय कीमत (Fixed Price) लोड करना
+        if (prices[id] !== undefined && prices[id] !== null && prices[id] !== '') {
+          billAmount.value = prices[id];
+          priceBadge.innerHTML = `<span style="color:#10b981; font-size:0.72rem; font-weight:bold;">📌 तय रेट: ₹${prices[id]}</span>`;
+        } else {
+          billAmount.value = '';
+          priceBadge.innerHTML = '';
+        }
+
+        // 3. पिछला बकाया लोड करना
+        const oldDue = getCustomerDueOnly(id);
+        if (oldDue > 0) {
+          prevDueAlert.style.display = 'flex';
+          prevDueVal.innerText = `₹ ${oldDue}`;
+          prevDueInput.value = oldDue;
+        } else {
+          prevDueAlert.style.display = 'none';
+          prevDueInput.value = 0;
+        }
+      } else {
+        custName.value = '';
+        custName.readOnly = false;
+        nameStatusBadge.innerHTML = '';
+        billAmount.value = '';
+        priceBadge.innerHTML = '';
+        prevDueAlert.style.display = 'none';
+        prevDueInput.value = 0;
+      }
+      updateAndDraw();
+    }
+
+    // =========================================================================
+    // ऑटो-नेक्स्ट ID के साथ फ़ील्ड्स रीसेट करना (1 के बाद ऑटो 2 आना)
+    // =========================================================================
+    function resetBillingFields(suggestNext = true) {
+      let targetId = '';
+      const lastId = localStorage.getItem('smart_last_billed_id');
+      
+      if (suggestNext && lastId && !isNaN(parseInt(lastId))) {
+        targetId = (parseInt(lastId) + 1).toString();
+      }
+
+      custNumber.value = targetId;
+      loadCustomerData(targetId);
+
+      // पेमेंट इनपुट्स हमेशा 0
+      cashAmount.value = '0';
+      onlineAmount.value = '0';
+      setDefaultDateTime();
+    }
+
+    // ID टाइप करने पर
+    custNumber.addEventListener('input', () => {
+      const id = custNumber.value.trim();
+      loadCustomerData(id);
+    });
+
+    // ◀ पिछला ID बटन
+    btnPrevId.addEventListener('click', () => {
+      let current = parseInt(custNumber.value.trim());
+      if (isNaN(current) || current <= 1) {
+        current = 1;
+      } else {
+        current -= 1;
+      }
+      custNumber.value = current;
+      loadCustomerData(current.toString());
+    });
+
+    // ▶ अगला ID बटन
+    btnNextId.addEventListener('click', () => {
+      let current = parseInt(custNumber.value.trim());
+      if (isNaN(current)) {
+        current = 1;
+      } else {
+        current += 1;
+      }
+      custNumber.value = current;
+      loadCustomerData(current.toString());
+    });
+
+    function unlockNameForEdit() {
+      const id = custNumber.value.trim();
+      const oldName = custName.value.trim();
+      if (confirm(`क्या आप ID "${id}" का नाम "${oldName}" बदलना चाहते हैं?`)) {
+        custName.readOnly = false;
+        custName.focus();
+        custName.select();
+        nameStatusBadge.innerHTML = `<span style="color:#f59e0b; font-weight:bold; font-size:0.75rem;">⚠️ एडिट मोड</span>`;
+      }
+    }
+
+    // नाम बदलने पर मास्टर में अपडेट
+    custName.addEventListener('input', () => {
+      const id = custNumber.value.trim();
+      const name = custName.value.trim();
+      if (id && name) {
+        const master = getMasterDirectory();
+        master[id] = name;
+        saveMasterDirectory(master);
+      }
+      updateAndDraw();
+    });
+
+    // बिल अमाउंट बदलने पर तय कीमत (Fixed Price) का लाइव अपडेट
+    billAmount.addEventListener('input', () => {
+      const id = custNumber.value.trim();
+      const amt = parseFloat(billAmount.value);
+      if (id && !isNaN(amt)) {
+        const prices = getMasterPrices();
+        prices[id] = amt;
+        saveMasterPrices(prices);
+        priceBadge.innerHTML = `<span style="color:#f59e0b; font-size:0.72rem; font-weight:bold;">✏️ नया तय रेट: ₹${amt}</span>`;
+      }
+      updateAndDraw();
+    });
+
+    btnSettleOldDue.addEventListener('click', () => {
+      const id = custNumber.value.trim();
+      const master = getMasterDirectory();
+      if (id && master[id]) {
+        custName.value = master[id];
+      }
+      billAmount.value = 0;
+      cashAmount.value = prevDueInput.value;
+      onlineAmount.value = 0;
+      updateAndDraw();
+    });
+
+    dateTimeInput.addEventListener('input', updateAndDraw);
+    prevDueInput.addEventListener('input', updateAndDraw);
+    cashAmount.addEventListener('input', updateAndDraw);
+    onlineAmount.addEventListener('input', updateAndDraw);
+
+    // Shortcuts
+    btnFullCash.addEventListener('click', () => {
+      const totalPayable = (parseFloat(billAmount.value) || 0) + (parseFloat(prevDueInput.value) || 0);
+      cashAmount.value = totalPayable;
+      onlineAmount.value = 0;
+      updateAndDraw();
+    });
+
+    btnFullOnline.addEventListener('click', () => {
+      const totalPayable = (parseFloat(billAmount.value) || 0) + (parseFloat(prevDueInput.value) || 0);
+      onlineAmount.value = totalPayable;
+      cashAmount.value = 0;
+      updateAndDraw();
+    });
+
+    btnClearRecv.addEventListener('click', () => {
+      cashAmount.value = 0;
+      onlineAmount.value = 0;
+      updateAndDraw();
+    });
+
+    function calculateKhata() {
+      const todayBill = parseFloat(billAmount.value) || 0;
+      const oldDue = parseFloat(prevDueInput.value) || 0;
+      const totalPayable = todayBill + oldDue;
+
+      const cash = parseFloat(cashAmount.value) || 0;
+      const online = parseFloat(onlineAmount.value) || 0;
+      
+      const totalHandedOver = cash + online;
+      const diff = totalHandedOver - totalPayable;
+
+      totalRecvLabel.innerText = `₹ ${totalHandedOver.toFixed(2)}`;
+      payableBadge.innerText = `कुल देनदारी: ₹${totalPayable}`;
+
+      statusCard.classList.remove('card-change', 'card-due', 'card-exact');
+
+      let statusType = "EXACT";
+      let statusTextPhoto = "";
+      let accentColor = "#38bdf8";
+      let due = 0;
+      let change = 0;
+
+      if (diff > 0) {
+        statusType = "CHANGE";
+        change = diff;
+        statusCard.classList.add('card-change');
+        statusTitle.innerText = "🔄 वापस करने हैं (Change):";
+        statusValue.innerText = `₹ ${diff.toFixed(2)}`;
+        statusTextPhoto = `🔄 Change: ₹${diff.toFixed(2)} (मिला: ₹${totalHandedOver})`;
+        accentColor = "#34d399";
+      } else if (diff < 0) {
+        statusType = "DUE";
+        due = Math.abs(diff);
+        statusCard.classList.add('card-due');
+        statusTitle.innerText = "⚠️ अब भी बाकी (Due):";
+        statusValue.innerText = `₹ ${due.toFixed(2)}`;
+        statusTextPhoto = `⚠️ Due: ₹${due.toFixed(2)} | Recv: ₹${totalHandedOver}`;
+        accentColor = "#f87171";
+      } else {
+        statusType = "EXACT";
+        statusCard.classList.add('card-exact');
+        statusTitle.innerText = "भुगतान स्थिति:";
+        statusValue.innerText = "✅ पूरा भुगतान (₹ 0 बाकी)";
+        statusTextPhoto = `✅ Paid in Full (₹${totalHandedOver})`;
+        accentColor = "#38bdf8";
+      }
+
+      const netCash = Math.max(0, cash - change);
+
+      return {
+        todayBill,
+        oldDue,
+        totalPayable,
+        cash,
+        netCash,
+        online,
+        totalHandedOver,
+        due,
+        change,
+        statusTextPhoto,
+        accentColor
+      };
+    }
+
+    captureBtn.addEventListener('click', () => {
+      canvas.width = video.videoWidth || 640;
+      canvas.height = video.videoHeight || 480;
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      capturedImage = new Image();
+      capturedImage.src = canvas.toDataURL('image/png');
+      capturedImage.onload = () => showEditMode();
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          capturedImage = new Image();
+          capturedImage.src = event.target.result;
+          capturedImage.onload = () => {
+            canvas.width = capturedImage.width;
+            canvas.height = capturedImage.height;
+            showEditMode();
+          };
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function showEditMode() {
+      video.style.display = 'none';
+      canvas.style.display = 'block';
+      captureBtn.style.display = 'none';
+      document.querySelectorAll('.or-divider, label[for="fileInput"]').forEach(el => el.style.display = 'none');
+      inputsContainer.style.display = 'flex';
+      
+      resetBillingFields(true); // ऑटो अगला नंबर लोड करें
+      updateAndDraw();
+    }
+
+    function updateAndDraw() {
+      const calc = calculateKhata();
+      drawOnCanvas(calc);
+    }
+
+    function drawOnCanvas(calc) {
+      if (!capturedImage) return;
+      ctx.drawImage(capturedImage, 0, 0, canvas.width, canvas.height);
+
+      const name = custName.value.trim();
+      const num = custNumber.value.trim();
+      const dtValue = dateTimeInput.value;
+
+      let formattedDate = "";
+      if (dtValue) {
+        const d = new Date(dtValue);
+        formattedDate = d.toLocaleString('en-IN', {
+          day: '2-digit', month: 'short', year: 'numeric',
+          hour: '2-digit', minute: '2-digit', hour12: true
+        });
+      }
+
+      const fontSize = Math.max(13, Math.floor(canvas.width * 0.031));
+      const lineHeight = fontSize * 1.42;
+      const padding = canvas.width * 0.025;
+      const stripHeight = (lineHeight * 4) + (padding * 2);
+
+      ctx.fillStyle = "rgba(11, 19, 41, 0.92)";
+      ctx.fillRect(0, canvas.height - stripHeight, canvas.width, stripHeight);
+
+      ctx.fillStyle = calc.accentColor;
+      ctx.fillRect(0, canvas.height - stripHeight, canvas.width, 3.5);
+
+      ctx.font = `bold ${fontSize}px sans-serif`;
+      ctx.shadowColor = "rgba(0,0,0,0.9)";
+      ctx.shadowBlur = 4;
+
+      let textY = canvas.height - stripHeight + padding + fontSize;
+
+      const customerStr = `👤 ${name || 'Customer'}` + (num ? ` (ID/No: ${num})` : '');
+      ctx.fillStyle = "#ffffff";
+      ctx.fillText(customerStr, padding, textY);
+
+      textY += lineHeight;
+      ctx.fillStyle = "#94a3b8";
+      ctx.fillText(`📅 ${formattedDate}`, padding, textY);
+
+      textY += lineHeight;
+      ctx.fillStyle = "#e2e8f0";
+      let billDetailsStr = `🧾 Bill: ₹${calc.todayBill}`;
+      if (calc.oldDue > 0) billDetailsStr += ` + पिछला: ₹${calc.oldDue}`;
+      billDetailsStr += ` | Recv: ₹${calc.totalHandedOver} (💵${calc.cash} 📱${calc.online})`;
+      ctx.fillText(billDetailsStr, padding, textY);
+
+      textY += lineHeight;
+      ctx.fillStyle = calc.accentColor;
+      ctx.fillText(calc.statusTextPhoto, padding, textY);
+    }
+
+    // =========================================================================
+    // डाउनलोड और तय कीमत + लास्ट ID सेविंग
+    // =========================================================================
+    downloadBtn.addEventListener('click', () => {
+      const calc = calculateKhata();
+      drawOnCanvas(calc);
+
+      const finalNum = custNumber.value.trim();
+      let finalName = custName.value.trim();
+
+      const master = getMasterDirectory();
+      const prices = getMasterPrices();
+
+      if (!finalName && finalNum && master[finalNum]) {
+        finalName = master[finalNum];
+      }
+
+      // नाम और तय कीमत को हमेशा के लिए मेमोरी में लॉक करना
+      if (finalNum) {
+        if (finalName && !finalName.startsWith('Customer-')) {
+          master[finalNum] = finalName;
+          saveMasterDirectory(master);
+        }
+        if (calc.todayBill > 0) {
+          prices[finalNum] = calc.todayBill;
+          saveMasterPrices(prices);
+        }
+        // अंतिम बिल किया गया नंबर याद रखें (अगले नंबर के लिए)
+        localStorage.setItem('smart_last_billed_id', finalNum);
+      }
+
+      if (!finalName) finalName = 'Customer';
+
+      // 1. Download Photo
+      const link = document.createElement('a');
+      link.download = `Bill_${finalName}_${Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png', 1.0);
+      link.click();
+
+      // 2. Save into History
+      const dtValue = dateTimeInput.value ? new Date(dateTimeInput.value) : new Date();
+      const dateString = dtValue.toISOString().split('T')[0];
+      const timeString = dtValue.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+      const newRecord = {
+        id: Date.now(),
+        date: dateString,
+        time: timeString,
+        name: finalName,
+        number: finalNum,
+        todayBill: calc.todayBill,
+        oldDue: calc.oldDue,
+        totalPayable: calc.totalPayable,
+        settledOldDue: Math.min(calc.oldDue, calc.totalHandedOver),
+        cashGiven: calc.cash,
+        onlineGiven: calc.online,
+        totalHandedOver: calc.totalHandedOver,
+        netCash: calc.netCash,
+        online: calc.online,
+        due: calc.due,
+        change: calc.change
+      };
+
+      const records = getBillingRecords();
+      records.unshift(newRecord);
+      saveBillingRecords(records);
+
+      downloadBtn.innerText = "✅ डाउनलोड हो गया!";
+      setTimeout(() => {
+        downloadBtn.innerText = "⬇️ Save & Download Photo";
+      }, 2000);
+
+      // अगर ऑटो-नेक्स्ट ऑन है तो सीधे अगले नंबर के लिए कैमरा खुलेगा
+      if (autoNextBillToggle.checked) {
+        setTimeout(() => {
+          resetToCamera();
+        }, 1200);
+      }
+    });
+
+    function resetToCamera() {
+      canvas.style.display = 'none';
+      video.style.display = 'block';
+      captureBtn.style.display = 'block';
+      document.querySelectorAll('.or-divider, label[for="fileInput"]').forEach(el => el.style.display = 'block');
+      inputsContainer.style.display = 'none';
+      resetBillingFields(true); // ऑटो +1 नंबर तैयार रखे
+    }
+
+    retakeBtn.addEventListener('click', () => {
+      resetToCamera();
+    });
+
+    // =========================================================================
+    // 3. DASHBOARD RENDER
+    // =========================================================================
+    function renderDashboard() {
+      const allRecords = getBillingRecords();
+      const todayString = new Date().toISOString().split('T')[0];
+
+      let filtered = [];
+      if (currentFilterMode === "TODAY") {
+        filtered = allRecords.filter(r => r.date === todayString);
+      } else if (currentFilterMode === "CUSTOM") {
+        const selectedDate = customDatePicker.value;
+        filtered = allRecords.filter(r => r.date === selectedDate);
+      } else {
+        filtered = allRecords;
+      }
+
+      let totalCash = 0;
+      let totalOnline = 0;
+      let grandTotal = 0;
+
+      filtered.forEach(r => {
+        const c = (r.netCash !== undefined) ? r.netCash : (r.cashGiven !== undefined ? r.cashGiven : 0);
+        const o = (r.online !== undefined) ? r.online : (r.onlineGiven !== undefined ? r.onlineGiven : 0);
+        totalCash += c;
+        totalOnline += o;
+        grandTotal += (c + o);
+      });
+
+      let displayDue = 0;
+
+      if (currentFilterMode === "TODAY") {
+        dashDueLabel.innerText = "⚠️ आज का बकाया (Today)";
+        filtered.forEach(r => {
+          displayDue += (r.due || 0);
+        });
+      } else if (currentFilterMode === "CUSTOM") {
+        dashDueLabel.innerText = "⚠️ इस तारीख का बकाया";
+        filtered.forEach(r => {
+          displayDue += (r.due || 0);
+        });
+      } else {
+        dashDueLabel.innerText = "⚠️ कुल बाकी (Total Outstanding)";
+        const checkedCustomers = new Set();
+        allRecords.forEach(r => {
+          if (r.number && !checkedCustomers.has(r.number)) {
+            displayDue += getCustomerDueOnly(r.number);
+            checkedCustomers.add(r.number);
+          } else if (!r.number) {
+            displayDue += (r.due || 0);
+          }
+        });
+      }
+
+      dashTotalCash.innerText = `₹ ${totalCash.toFixed(2)}`;
+      dashTotalOnline.innerText = `₹ ${totalOnline.toFixed(2)}`;
+      dashGrandTotal.innerText = `₹ ${grandTotal.toFixed(2)}`;
+      dashTotalDue.innerText = `₹ ${displayDue.toFixed(2)}`;
+      historyCount.innerText = filtered.length;
+
+      historyList.innerHTML = '';
+      if (filtered.length === 0) {
+        historyList.innerHTML = `<div style="text-align:center; color:#64748b; font-size:0.85rem; padding:15px;">कोई लेन-देन नहीं मिला</div>`;
+        return;
+      }
+
+      filtered.forEach(r => {
+        const item = document.createElement('div');
+        item.className = 'history-item';
+
+        const billVal = r.todayBill !== undefined ? r.todayBill : (r.bill || 0);
+        const oldDueVal = r.oldDue || 0;
+        const totalBillVal = r.totalPayable !== undefined ? r.totalPayable : (billVal + oldDueVal);
+        
+        const dueVal = r.due || 0;
+        const changeVal = r.change || 0;
+
+        const actualCash = (r.cashGiven !== undefined) ? r.cashGiven : (r.netCash !== undefined ? r.netCash : 0);
+        const actualOnline = (r.onlineGiven !== undefined) ? r.onlineGiven : (r.online !== undefined ? r.online : 0);
+        
+        let totalGiven = r.totalHandedOver;
+        if (totalGiven === undefined) {
+          totalGiven = actualCash + actualOnline;
+        }
+
+        let paymentBadge = '';
+        if (actualCash > 0 && actualOnline > 0) {
+          paymentBadge = `<span class="h-badge h-badge-split">💰 कुल दिया: ₹${totalGiven}</span>`;
+        } else if (actualOnline > 0 && actualCash === 0) {
+          paymentBadge = `<span class="h-badge h-badge-online">📱 UPI प्राप्त: ₹${actualOnline}</span>`;
+        } else if (actualCash > 0 && actualOnline === 0) {
+          paymentBadge = `<span class="h-badge h-badge-cash">💵 कैश प्राप्त: ₹${actualCash}</span>`;
+        } else {
+          paymentBadge = `<span class="h-badge h-badge-bill">प्राप्त: ₹0</span>`;
+        }
+
+        let statusBadge = '';
+        if (changeVal > 0) {
+          statusBadge = `<span class="h-badge h-badge-change">🔄 वापस (माइनस): ₹${changeVal}</span>`;
+        } else if (dueVal > 0) {
+          statusBadge = `<span class="h-badge h-badge-due">⚠️ बाकी: ₹${dueVal}</span>`;
+        } else {
+          statusBadge = `<span class="h-badge h-badge-paid">✅ पूरा भुगतान</span>`;
+        }
+
+        let subTextHtml = `जमा हुआ: ₹${totalGiven} (💵 कैश: ₹${actualCash} | 📱 ऑनलाइन: ₹${actualOnline})`;
+        if (changeVal > 0) {
+          subTextHtml = `गल्ले में शुद्ध जमा: ₹${actualCash - changeVal} (💵 कैश: ₹${actualCash} में से ₹${changeVal} वापस | 📱 ऑनलाइन: ₹${actualOnline})`;
+        }
+
+        item.innerHTML = `
+          <div class="history-top">
+            <div>
+              <span class="history-cust-title">👤 ${r.name} ${r.number ? `(${r.number})` : ''}</span>
+              <div class="history-time">📅 ${r.date} ${r.time}</div>
+            </div>
+            <button class="btn-del" onclick="deleteRecord(${r.id})" title="हटाएं">❌</button>
+          </div>
+
+          <div class="history-badges-row">
+            <span class="h-badge h-badge-bill">🧾 कुल बिल: ₹${totalBillVal}</span>
+            ${paymentBadge}
+            ${statusBadge}
+          </div>
+
+          <div class="history-sub-text">
+            <span>${subTextHtml}</span>
+          </div>
+        `;
+        historyList.appendChild(item);
+      });
+    }
+
+    window.deleteRecord = function(id) {
+      if (confirm("क्या आप इस बिल को हटाना चाहते हैं?")) {
+        let records = getBillingRecords();
+        records = records.filter(r => r.id !== id);
+        saveBillingRecords(records);
+      }
+    };
+
+    filterToday.addEventListener('click', () => {
+      currentFilterMode = "TODAY";
+      filterToday.classList.add('active');
+      filterAll.classList.remove('active');
+      customDatePicker.value = '';
+      renderDashboard();
+    });
+
+    filterAll.addEventListener('click', () => {
+      currentFilterMode = "ALL";
+      filterAll.classList.add('active');
+      filterToday.classList.remove('active');
+      customDatePicker.value = '';
+      renderDashboard();
+    });
+
+    customDatePicker.addEventListener('change', () => {
+      if (customDatePicker.value) {
+        currentFilterMode = "CUSTOM";
+        filterToday.classList.remove('active');
+        filterAll.classList.remove('active');
+        renderDashboard();
+      }
+    });
+
+    btnClearAllHistory.addEventListener('click', () => {
+      if (confirm("चेतावनी: क्या आप सारा कलेक्शन डेटा मिटाना चाहते हैं?")) {
+        localStorage.removeItem('smart_billing_records');
+        renderDashboard();
+      }
+    });
+
+    startCamera();
+    renderDashboard();
+  </script>
 </body>
-
 </html>
