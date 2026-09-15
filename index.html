@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Billing & Auto-Sequential Khata Register</title>
+  <title>Smart Billing, Khata & Split Waiting Register</title>
   <style>
     * {
       box-sizing: border-box;
@@ -78,29 +78,13 @@
       text-align: center;
     }
 
-    .btn:hover {
-      background: #0284c7;
-      color: #fff;
-    }
+    .btn:hover { background: #0284c7; color: #fff; }
 
-    .btn-download {
-      background: #22c55e;
-      color: white;
-      margin-top: 4px;
-    }
+    .btn-download { background: #22c55e; color: white; margin-top: 4px; }
+    .btn-download:hover { background: #16a34a; }
 
-    .btn-download:hover {
-      background: #16a34a;
-    }
-
-    .btn-retake {
-      background: #ef4444;
-      color: white;
-    }
-
-    .btn-retake:hover {
-      background: #dc2626;
-    }
+    .btn-retake { background: #ef4444; color: white; }
+    .btn-retake:hover { background: #dc2626; }
 
     .btn-shortcut {
       background: #334155;
@@ -114,10 +98,7 @@
       font-weight: 600;
     }
 
-    .btn-shortcut:hover {
-      background: #475569;
-      color: #fff;
-    }
+    .btn-shortcut:hover { background: #475569; color: #fff; }
 
     .btn-step-id {
       background: #0284c7;
@@ -128,10 +109,6 @@
       font-size: 0.75rem;
       cursor: pointer;
       font-weight: bold;
-    }
-
-    .btn-step-id:hover {
-      background: #0369a1;
     }
 
     .btn-edit-name {
@@ -151,14 +128,8 @@
       gap: 10px;
     }
 
-    .row {
-      display: flex;
-      gap: 8px;
-    }
-
-    .col {
-      flex: 1;
-    }
+    .row { display: flex; gap: 8px; }
+    .col { flex: 1; }
 
     label {
       font-size: 0.8rem;
@@ -180,11 +151,8 @@
       outline: none;
     }
 
-    input:focus {
-      border-color: #38bdf8;
-    }
+    input:focus { border-color: #38bdf8; }
 
-    /* लॉक किया हुआ इनपुट (Read-Only) */
     input[readonly] {
       background: #1a2234 !important;
       color: #38bdf8 !important;
@@ -193,7 +161,7 @@
       font-weight: bold;
     }
 
-    /* Previous Due Alert Box */
+    /* Alerts */
     .prev-due-alert {
       background: #450a0a;
       border: 1px solid #ef4444;
@@ -206,15 +174,26 @@
       color: #fca5a5;
     }
 
-    .btn-clear-due {
-      background: #ef4444;
-      color: white;
+    .prev-advance-alert {
+      background: #064e3b;
+      border: 1px solid #10b981;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      color: #a7f3d0;
+    }
+
+    .btn-alert-action {
       border: none;
       padding: 5px 9px;
       border-radius: 4px;
       font-size: 0.78rem;
       cursor: pointer;
       font-weight: bold;
+      color: white;
     }
 
     .shortcuts-bar {
@@ -223,6 +202,44 @@
       justify-content: flex-end;
       margin-top: -4px;
       margin-bottom: 2px;
+      flex-wrap: wrap;
+    }
+
+    /* Pending Money Action Selection */
+    .remaining-choice-box {
+      background: #1e1b4b;
+      border: 1px solid #6366f1;
+      padding: 8px 10px;
+      border-radius: 8px;
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .btn-remain-toggle {
+      flex: 1;
+      border: 1px solid #475569;
+      background: #0f172a;
+      color: #94a3b8;
+      padding: 6px 4px;
+      border-radius: 5px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      font-weight: 700;
+      text-align: center;
+      transition: 0.2s;
+    }
+
+    .btn-remain-toggle.active-due {
+      background: #7f1d1d;
+      color: #fecaca;
+      border-color: #ef4444;
+    }
+
+    .btn-remain-toggle.active-wait {
+      background: #78350f;
+      color: #fde68a;
+      border-color: #f59e0b;
     }
 
     /* Status Card */
@@ -231,7 +248,7 @@
       border-radius: 8px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 8px;
       font-weight: bold;
       transition: 0.2s;
     }
@@ -252,19 +269,44 @@
       font-size: 1.05rem;
     }
 
-    .card-change { background: #064e3b; border: 1.5px solid #10b981; color: #34d399; }
-    .card-due { background: #450a0a; border: 1.5px solid #ef4444; color: #f87171; }
-    .card-exact { background: #0c4a6e; border: 1.5px solid #38bdf8; color: #38bdf8; }
+    /* Extra Action Choice Box */
+    .extra-action-box {
+      display: flex;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.7);
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
 
-    .or-divider {
-      color: #64748b;
-      font-size: 0.8rem;
+    .btn-choice {
+      flex: 1;
+      border: 1px solid #475569;
+      background: #1e293b;
+      color: #cbd5e1;
+      padding: 6px 4px;
+      border-radius: 5px;
+      font-size: 0.76rem;
+      cursor: pointer;
+      font-weight: 700;
+      transition: 0.2s;
       text-align: center;
     }
 
+    .btn-choice.active-change { background: #10b981; color: #0f172a; border-color: #10b981; }
+    .btn-choice.active-advance { background: #38bdf8; color: #0f172a; border-color: #38bdf8; }
+
+    .card-change { background: #064e3b; border: 1.5px solid #10b981; color: #34d399; }
+    .card-advance { background: #0f3d4a; border: 1.5px solid #38bdf8; color: #38bdf8; }
+    .card-due { background: #450a0a; border: 1.5px solid #ef4444; color: #f87171; }
+    .card-waiting { background: #451a03; border: 1.5px solid #f59e0b; color: #fde68a; }
+    .card-absent { background: #1e293b; border: 1.5px solid #64748b; color: #cbd5e1; }
+    .card-exact { background: #0c4a6e; border: 1.5px solid #38bdf8; color: #38bdf8; }
+
+    .or-divider { color: #64748b; font-size: 0.8rem; text-align: center; }
     #fileInput { display: none; }
 
-    /* Auto-Next Switch Styling */
+    /* Auto-Next Switch */
     .toggle-row {
       display: flex;
       align-items: center;
@@ -283,11 +325,7 @@
       height: 24px;
     }
 
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
+    .switch input { opacity: 0; width: 0; height: 0; }
 
     .slider {
       position: absolute;
@@ -310,15 +348,10 @@
       border-radius: 50%;
     }
 
-    input:checked + .slider {
-      background-color: #10b981;
-    }
+    input:checked + .slider { background-color: #10b981; }
+    input:checked + .slider:before { transform: translateX(20px); }
 
-    input:checked + .slider:before {
-      transform: translateX(20px);
-    }
-
-    /* Dashboard */
+    /* Dashboard Header & Tabs */
     .dashboard-header {
       display: flex;
       justify-content: space-between;
@@ -329,7 +362,7 @@
 
     .filter-bar {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       align-items: center;
       margin-top: 4px;
     }
@@ -338,9 +371,9 @@
       background: #0f172a;
       border: 1px solid #334155;
       color: #94a3b8;
-      padding: 6px 12px;
+      padding: 6px 10px;
       border-radius: 6px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       cursor: pointer;
       font-weight: 600;
     }
@@ -351,6 +384,7 @@
       border-color: #38bdf8;
     }
 
+    /* Summary Metric Cards */
     .metrics-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -368,7 +402,7 @@
     }
 
     .metric-label { font-size: 0.78rem; color: #94a3b8; margin-bottom: 2px; }
-    .metric-value { font-size: 1.25rem; font-weight: 800; }
+    .metric-value { font-size: 1.22rem; font-weight: 800; }
     .metric-cash { border-left: 4px solid #10b981; }
     .metric-cash .metric-value { color: #34d399; }
     .metric-online { border-left: 4px solid #818cf8; }
@@ -377,17 +411,55 @@
     .metric-total .metric-value { color: #38bdf8; }
     .metric-due { border-left: 4px solid #ef4444; }
     .metric-due .metric-value { color: #f87171; }
+    .metric-waiting { border-left: 4px solid #f59e0b; }
+    .metric-waiting .metric-value { color: #fbbf24; }
+    .metric-absent { border-left: 4px solid #64748b; }
+    .metric-absent .metric-value { color: #94a3b8; }
+    .metric-advance { border-left: 4px solid #06b6d4; grid-column: span 2; }
+    .metric-advance .metric-value { color: #22d3ee; }
 
-    /* Detailed History Cards */
+    /* 5 View Switcher Tabs */
+    .view-switcher {
+      display: flex;
+      gap: 4px;
+      background: #0f172a;
+      padding: 5px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      margin-top: 4px;
+      overflow-x: auto;
+    }
+
+    .view-tab {
+      flex: 1;
+      min-width: 65px;
+      text-align: center;
+      padding: 6px 2px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #94a3b8;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.2s;
+      white-space: nowrap;
+    }
+
+    .view-tab.active {
+      background: #1e293b;
+      color: #38bdf8;
+      border: 1px solid #38bdf8;
+    }
+
+    /* History & Lists */
     .history-section {
-      margin-top: 8px;
+      margin-top: 6px;
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
 
     .history-list {
-      max-height: 280px;
+      max-height: 310px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
@@ -413,17 +485,8 @@
       padding-bottom: 6px;
     }
 
-    .history-cust-title {
-      font-weight: 700;
-      color: #f8fafc;
-      font-size: 0.92rem;
-    }
-
-    .history-time {
-      font-size: 0.74rem;
-      color: #64748b;
-      margin-top: 1px;
-    }
+    .history-cust-title { font-weight: 700; color: #f8fafc; font-size: 0.92rem; }
+    .history-time { font-size: 0.74rem; color: #64748b; margin-top: 1px; }
 
     .history-badges-row {
       display: flex;
@@ -444,19 +507,57 @@
     }
 
     .h-badge-bill { background: #172554; color: #93c5fd; border: 1px solid #2563eb; }
+    .h-badge-deduct { background: #083344; color: #22d3ee; border: 1px solid #06b6d4; }
     .h-badge-online { background: #1e1b4b; color: #c7d2fe; border: 1px solid #6366f1; }
+    .h-badge-later-online { background: #2e1065; color: #d8b4fe; border: 1px solid #a855f7; }
     .h-badge-cash { background: #064e3b; color: #6ee7b7; border: 1px solid #10b981; }
     .h-badge-split { background: #312e81; color: #e0e7ff; border: 1px solid #818cf8; }
     .h-badge-due { background: #450a0a; color: #fca5a5; border: 1px solid #ef4444; }
+    .h-badge-waiting { background: #451a03; color: #fde68a; border: 1px solid #d97706; }
+    .h-badge-absent { background: #1e293b; color: #cbd5e1; border: 1px solid #64748b; }
     .h-badge-change { background: #064e3b; color: #6ee7b7; border: 1px solid #10b981; }
+    .h-badge-advance { background: #083344; color: #67e8f9; border: 1px solid #06b6d4; }
     .h-badge-paid { background: #0c4a6e; color: #7dd3fc; border: 1px solid #0284c7; }
+
+    /* एक्शन बटन्स */
+    .btn-confirm-upi {
+      background: #10b981;
+      color: #0f172a;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 5px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      cursor: pointer;
+      margin-left: 2px;
+    }
+    .btn-confirm-upi:hover { background: #34d399; }
+
+    .btn-transfer-due {
+      background: #b91c1c;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 5px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      cursor: pointer;
+      margin-left: 2px;
+    }
+    .btn-transfer-due:hover { background: #dc2626; }
 
     .history-sub-text {
       font-size: 0.76rem;
       color: #94a3b8;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .history-note-text {
+      color: #fbbf24;
+      font-size: 0.76rem;
+      font-weight: 600;
     }
 
     .btn-del {
@@ -471,7 +572,7 @@
 </head>
 <body>
 
-  <h1>📸 Smart Billing & Locked Khata Register</h1>
+  <h1>📸 Smart Billing & Split Waiting Register</h1>
 
   <!-- 1. CAMERA & BILLING FORM -->
   <div class="container">
@@ -488,7 +589,7 @@
     <!-- Form Section -->
     <div class="inputs-container" id="inputsContainer">
       
-      <!-- Customer Info with Auto-Step Next/Prev -->
+      <!-- Customer Info -->
       <div class="row">
         <div class="col">
           <label>
@@ -498,7 +599,7 @@
               <button type="button" class="btn-step-id" id="btnNextId" title="अगला ID">▶</button>
             </span>
           </label>
-          <input type="text" id="custNumber" placeholder="e.g. 1">
+          <input type="text" id="custNumber" placeholder="e.g. 109">
         </div>
         <div class="col">
           <label>
@@ -509,10 +610,15 @@
         </div>
       </div>
 
-      <!-- Live Previous Due Alert -->
+      <!-- Previous Due / Advance Alerts -->
       <div id="prevDueAlert" class="prev-due-alert">
         <span>⚠️ पिछला बकाया: <b id="prevDueVal">₹ 0</b></span>
-        <button type="button" class="btn-clear-due" id="btnSettleOldDue">पुराना बकाया भरें</button>
+        <button type="button" class="btn-alert-action" style="background:#ef4444;" id="btnSettleOldDue">पुराना बकाया भरें</button>
+      </div>
+
+      <div id="prevAdvanceAlert" class="prev-advance-alert">
+        <span>🎉 ग्राहक का पहले से जमा: <b id="prevAdvanceVal">₹ 0</b></span>
+        <button type="button" class="btn-alert-action" style="background:#10b981;" id="btnApplyOldAdvance">⚡ जमा से काटें</button>
       </div>
 
       <div>
@@ -520,7 +626,7 @@
         <input type="datetime-local" id="dateTimeInput">
       </div>
 
-      <!-- Bill & Old Due Inputs (With Fixed Price Indicator) -->
+      <!-- Bill & Adjust Inputs -->
       <div class="row">
         <div class="col">
           <label>
@@ -530,38 +636,60 @@
           <input type="number" id="billAmount" placeholder="0" value="">
         </div>
         <div class="col">
-          <label>पिछला बकाया जुड़ा (₹):</label>
-          <input type="number" id="prevDueInput" placeholder="0" value="0">
+          <label id="khataAdjustLabel">खाता बकाया/जमा (₹):</label>
+          <input type="number" id="prevAdjustInput" placeholder="0" value="0">
         </div>
       </div>
 
+      <!-- Shortcuts -->
       <div class="shortcuts-bar">
         <button type="button" class="btn-shortcut" id="btnFullCash">⚡ पूरा Cash</button>
         <button type="button" class="btn-shortcut" id="btnFullOnline">⚡ पूरा UPI/ATM</button>
+        <button type="button" class="btn-shortcut" id="btnAbsent" style="color:#f87171; border-color:#ef4444;">🚫 एब्सेंट</button>
         <button type="button" class="btn-shortcut" id="btnClearRecv">🔄 Reset 0</button>
       </div>
 
       <!-- Cash & Online Inputs -->
       <div class="row">
         <div class="col">
-          <label>💵 कैश प्राप्त (Cash ₹):</label>
+          <label>💵 कैश प्राप्त अभी (Cash ₹):</label>
           <input type="number" id="cashAmount" placeholder="0" value="0">
         </div>
         <div class="col">
-          <label>📱 ऑनलाइन प्राप्त (UPI ₹):</label>
+          <label>📱 ऑनलाइन प्राप्त अभी (UPI ₹):</label>
           <input type="number" id="onlineAmount" placeholder="0" value="0">
         </div>
+      </div>
+
+      <!-- Choice when money is pending -->
+      <div class="remaining-choice-box" id="remainingChoiceBox">
+        <span style="font-size:0.8rem; color:#fde68a;" id="remainingQuestionText">बाकी पैसे का क्या करना है?</span>
+        <div style="display:flex; gap:6px;">
+          <button type="button" class="btn-remain-toggle active-due" id="btnRemainDue">⚠️ सामान्य उधारी (Due)</button>
+          <button type="button" class="btn-remain-toggle" id="btnRemainWait">⏳ UPI वेटिंग (बाद में देगा)</button>
+        </div>
+      </div>
+
+      <!-- Manual Note Input -->
+      <div>
+        <label>📝 बिल नोट (टिप्पणी / Note):</label>
+        <input type="text" id="billNoteInput" placeholder="उदा. 500 कैश मिला, 500 बाद में देगा">
       </div>
 
       <!-- Status Card -->
       <div id="statusCard" class="status-card card-exact">
         <div class="status-header">
-          <span>कुल प्राप्त: <b id="totalRecvLabel" style="color:#fff;">₹ 0.00</b></span>
-          <span id="payableBadge">कुल देनदारी: ₹0</span>
+          <span>कुल प्राप्त अभी: <b id="totalRecvLabel" style="color:#fff;">₹ 0.00</b></span>
+          <span id="payableBadge">कुल बिल: ₹0</span>
         </div>
         <div class="status-body">
           <span id="statusTitle">स्थिति:</span>
           <span id="statusValue">✅ पूरा भुगतान (₹ 0 बाकी)</span>
+        </div>
+
+        <div id="extraActionChoice" class="extra-action-box" style="display: none;">
+          <div class="btn-choice active-change" id="btnChoiceChange">🔄 चेंज वापस किया</div>
+          <div class="btn-choice" id="btnChoiceAdvance">📥 छुट्टा नहीं था (जमा रखें)</div>
         </div>
       </div>
 
@@ -579,26 +707,28 @@
     </div>
   </div>
 
-  <!-- 2. COLLECTION DASHBOARD -->
+  <!-- 2. COLLECTION DASHBOARD & LISTS -->
   <div class="container">
     <div class="dashboard-header">
       <h2 style="font-size:1.15rem;">📊 कलेक्शन बहीखाता</h2>
       <button class="btn-shortcut" id="btnClearAllHistory" style="color:#f87171;">🗑️ Clear Data</button>
     </div>
 
+    <!-- Date Filters -->
     <div class="filter-bar">
       <button class="filter-btn active" id="filterToday">आज (Today)</button>
       <button class="filter-btn" id="filterAll">सभी (All)</button>
-      <input type="date" id="customDatePicker" style="padding: 5px 8px; font-size: 0.82rem; width: auto; flex:1;">
+      <input type="date" id="customDatePicker" style="padding: 5px 6px; font-size: 0.8rem; width: auto; flex:1;">
     </div>
 
+    <!-- Summary Metric Cards -->
     <div class="metrics-grid">
       <div class="metric-card metric-cash">
         <span class="metric-label">💵 कुल कैश प्राप्त</span>
         <span class="metric-value" id="dashTotalCash">₹ 0</span>
       </div>
       <div class="metric-card metric-online">
-        <span class="metric-label">📱 कुल UPI / ATM</span>
+        <span class="metric-label">📱 कुल UPI कंफर्म</span>
         <span class="metric-value" id="dashTotalOnline">₹ 0</span>
       </div>
       <div class="metric-card metric-total">
@@ -609,40 +739,59 @@
         <span class="metric-label" id="dashDueLabel">⚠️ आज का बकाया</span>
         <span class="metric-value" id="dashTotalDue">₹ 0</span>
       </div>
+      <div class="metric-card metric-waiting">
+        <span class="metric-label">⏳ UPI वेटिंग (Pending)</span>
+        <span class="metric-value" id="dashTotalWaiting">₹ 0</span>
+      </div>
+      <div class="metric-card metric-absent">
+        <span class="metric-label">🚫 आज एब्सेंट (Closed)</span>
+        <span class="metric-value" id="dashTotalAbsent">0</span>
+      </div>
+      <div class="metric-card metric-advance">
+        <span class="metric-label">📥 ग्राहकों का कुल एडवांस जमा</span>
+        <span class="metric-value" id="dashTotalAdvance">₹ 0</span>
+      </div>
     </div>
 
+    <!-- 5 View Switcher Tabs -->
+    <div class="view-switcher">
+      <div class="view-tab active" id="tabAllBills">📜 सभी बिल</div>
+      <div class="view-tab" id="tabWaitingList">⏳ वेटिंग (<span id="countWaiting">0</span>)</div>
+      <div class="view-tab" id="tabAdvanceList">📥 एडवांस (<span id="countAdvanceCust">0</span>)</div>
+      <div class="view-tab" id="tabDueList">⚠️ बकाया (<span id="countDueCust">0</span>)</div>
+      <div class="view-tab" id="tabAbsentList">🚫 एब्सेंट (<span id="countAbsent">0</span>)</div>
+    </div>
+
+    <!-- List Display -->
     <div class="history-section">
-      <div style="font-size:0.85rem; color:#94a3b8;">लेनदेन विवरण (<span id="historyCount">0</span> बिल)</div>
+      <div style="font-size:0.85rem; color:#94a3b8;" id="listSectionTitle">लेनदेन विवरण (<span id="historyCount">0</span> बिल)</div>
       <div class="history-list" id="historyList"></div>
     </div>
   </div>
 
   <script>
-    // 1. मास्टर कस्टमर डायरेक्टरी
     const initialMasterDirectory = {
       "101": "राहुल कुमार",
       "102": "अमित सिंह",
       "103": "विकास वर्मा",
+      "104": "राम कृष्ण",
+      "105": "Raju Kumar",
       "106": "Suraj samosha",
       "107": "Suraj samosha",
-      "9": "Mitha wala 3"
+      "109": "Gita ji",
+      "9": "Mitha wala 3",
+      "63": "इशु (सूरज चिकना) 2/2"
     };
 
     function getMasterDirectory() {
       let master = JSON.parse(localStorage.getItem('smart_master_customers_v3') || '{}');
-      if (Object.keys(master).length === 0) {
-        master = { ...initialMasterDirectory };
-      }
-      
+      if (Object.keys(master).length === 0) master = { ...initialMasterDirectory };
       const records = getBillingRecords();
       records.forEach(r => {
         if (r.number && r.name && !r.name.startsWith('Customer-') && r.name !== 'Customer') {
-          if (!master[r.number]) {
-            master[r.number] = r.name;
-          }
+          if (!master[r.number]) master[r.number] = r.name;
         }
       });
-
       localStorage.setItem('smart_master_customers_v3', JSON.stringify(master));
       return master;
     }
@@ -651,29 +800,16 @@
       localStorage.setItem('smart_master_customers_v3', JSON.stringify(dir));
     }
 
-    // =========================================================================
-    // ग्राहक की तय कीमत (Fixed Price) की मेमोरी
-    // =========================================================================
     const initialMasterPrices = {
-      "101": 240,
-      "102": 280,
-      "103": 500,
-      "106": 180,
-      "107": 180,
-      "9": 1200
+      "101": 240, "102": 280, "103": 500, "104": 2000, "105": 2500, "106": 180, "107": 180, "109": 1000, "9": 1200, "63": 180
     };
 
     function getMasterPrices() {
       let prices = JSON.parse(localStorage.getItem('smart_master_prices_v3') || '{}');
-      if (Object.keys(prices).length === 0) {
-        prices = { ...initialMasterPrices };
-      }
-      // पुरानी हिस्ट्री से भी तय कीमतें निकाल लें
+      if (Object.keys(prices).length === 0) prices = { ...initialMasterPrices };
       const records = getBillingRecords();
       records.forEach(r => {
-        if (r.number && r.todayBill && !prices[r.number]) {
-          prices[r.number] = r.todayBill;
-        }
+        if (r.number && r.todayBill && !prices[r.number]) prices[r.number] = r.todayBill;
       });
       localStorage.setItem('smart_master_prices_v3', JSON.stringify(prices));
       return prices;
@@ -698,19 +834,32 @@
     const prevDueAlert = document.getElementById('prevDueAlert');
     const prevDueVal = document.getElementById('prevDueVal');
     const btnSettleOldDue = document.getElementById('btnSettleOldDue');
+    const prevAdvanceAlert = document.getElementById('prevAdvanceAlert');
+    const prevAdvanceVal = document.getElementById('prevAdvanceVal');
+    const btnApplyOldAdvance = document.getElementById('btnApplyOldAdvance');
     const dateTimeInput = document.getElementById('dateTimeInput');
     const billAmount = document.getElementById('billAmount');
-    const prevDueInput = document.getElementById('prevDueInput');
+    const khataAdjustLabel = document.getElementById('khataAdjustLabel');
+    const prevAdjustInput = document.getElementById('prevAdjustInput');
     const cashAmount = document.getElementById('cashAmount');
     const onlineAmount = document.getElementById('onlineAmount');
+    const remainingChoiceBox = document.getElementById('remainingChoiceBox');
+    const remainingQuestionText = document.getElementById('remainingQuestionText');
+    const btnRemainDue = document.getElementById('btnRemainDue');
+    const btnRemainWait = document.getElementById('btnRemainWait');
+    const billNoteInput = document.getElementById('billNoteInput');
     const btnFullCash = document.getElementById('btnFullCash');
     const btnFullOnline = document.getElementById('btnFullOnline');
+    const btnAbsent = document.getElementById('btnAbsent');
     const btnClearRecv = document.getElementById('btnClearRecv');
     const statusCard = document.getElementById('statusCard');
     const totalRecvLabel = document.getElementById('totalRecvLabel');
     const payableBadge = document.getElementById('payableBadge');
     const statusTitle = document.getElementById('statusTitle');
     const statusValue = document.getElementById('statusValue');
+    const extraActionChoice = document.getElementById('extraActionChoice');
+    const btnChoiceChange = document.getElementById('btnChoiceChange');
+    const btnChoiceAdvance = document.getElementById('btnChoiceAdvance');
     const autoNextBillToggle = document.getElementById('autoNextBillToggle');
     const downloadBtn = document.getElementById('downloadBtn');
     const retakeBtn = document.getElementById('retakeBtn');
@@ -721,15 +870,36 @@
     const dashGrandTotal = document.getElementById('dashGrandTotal');
     const dashDueLabel = document.getElementById('dashDueLabel');
     const dashTotalDue = document.getElementById('dashTotalDue');
+    const dashTotalWaiting = document.getElementById('dashTotalWaiting');
+    const dashTotalAbsent = document.getElementById('dashTotalAbsent');
+    const dashTotalAdvance = document.getElementById('dashTotalAdvance');
     const historyList = document.getElementById('historyList');
     const historyCount = document.getElementById('historyCount');
+    const listSectionTitle = document.getElementById('listSectionTitle');
     const filterToday = document.getElementById('filterToday');
     const filterAll = document.getElementById('filterAll');
     const customDatePicker = document.getElementById('customDatePicker');
     const btnClearAllHistory = document.getElementById('btnClearAllHistory');
 
+    const tabAllBills = document.getElementById('tabAllBills');
+    const tabWaitingList = document.getElementById('tabWaitingList');
+    const tabAdvanceList = document.getElementById('tabAdvanceList');
+    const tabDueList = document.getElementById('tabDueList');
+    const tabAbsentList = document.getElementById('tabAbsentList');
+    const countWaiting = document.getElementById('countWaiting');
+    const countAdvanceCust = document.getElementById('countAdvanceCust');
+    const countDueCust = document.getElementById('countDueCust');
+    const countAbsent = document.getElementById('countAbsent');
+
     let capturedImage = null;
+    let cameraStream = null;
+    let isCameraActive = false;
     let currentFilterMode = "TODAY";
+    let currentViewTab = "BILLS";
+    let extraMode = "CHANGE";
+    let remainingPendingMode = "DUE";
+    let isAdvanceDeductionMode = false;
+    let isAbsentMode = false;
 
     function getBillingRecords() {
       return JSON.parse(localStorage.getItem('smart_billing_records') || '[]');
@@ -740,29 +910,52 @@
       renderDashboard();
     }
 
-    function getCustomerDueOnly(number) {
+    function getCustomerNetBalance(number) {
       if (!number) return 0;
       const records = getBillingRecords();
       let balance = 0;
       records.forEach(r => {
         if (r.number === number) {
-          balance += (r.due || 0);
-          balance -= (r.settledOldDue || 0);
+          const b = (r.todayBill !== undefined) ? r.todayBill : (r.bill || 0);
+          const moneyRetained = (r.netCash || 0) + (r.online || 0);
+          balance += (b - moneyRetained);
         }
       });
-      return Math.max(0, balance);
+      return balance;
     }
 
     async function startCamera() {
+      if (isCameraActive && cameraStream) return;
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({
+        cameraStream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 960 } }
         });
-        video.srcObject = stream;
+        video.srcObject = cameraStream;
+        await video.play();
+        isCameraActive = true;
       } catch (err) {
         console.warn("Camera start error: ", err);
       }
     }
+
+    function stopCamera() {
+      if (cameraStream) {
+        cameraStream.getTracks().forEach(track => { track.stop(); });
+        cameraStream = null;
+      }
+      if (video.srcObject) { video.srcObject = null; }
+      isCameraActive = false;
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        stopCamera();
+      } else {
+        if (inputsContainer.style.display !== 'flex') {
+          startCamera();
+        }
+      }
+    });
 
     function setDefaultDateTime() {
       const now = new Date();
@@ -770,15 +963,18 @@
       dateTimeInput.value = now.toISOString().slice(0, 16);
     }
 
-    // =========================================================================
-    // ग्राहक का डेटा (नाम + तय कीमत + बकाया) लोड करने का मास्टर फंक्शन
-    // =========================================================================
     function loadCustomerData(id) {
       const master = getMasterDirectory();
       const prices = getMasterPrices();
+      isAdvanceDeductionMode = false;
+      isAbsentMode = false;
+      extraMode = "CHANGE";
+      remainingPendingMode = "DUE";
+      updateRemainingButtons();
+      updateExtraButtons();
+      billNoteInput.value = '';
 
       if (id) {
-        // 1. नाम ढूंढना और लॉक करना
         if (master[id]) {
           custName.value = master[id];
           custName.readOnly = true;
@@ -794,7 +990,6 @@
           nameStatusBadge.innerHTML = `<span style="color:#38bdf8; font-weight:bold; font-size:0.75rem;">✍️ नया</span>`;
         }
 
-        // 2. तय कीमत (Fixed Price) लोड करना
         if (prices[id] !== undefined && prices[id] !== null && prices[id] !== '') {
           billAmount.value = prices[id];
           priceBadge.innerHTML = `<span style="color:#10b981; font-size:0.72rem; font-weight:bold;">📌 तय रेट: ₹${prices[id]}</span>`;
@@ -803,15 +998,25 @@
           priceBadge.innerHTML = '';
         }
 
-        // 3. पिछला बकाया लोड करना
-        const oldDue = getCustomerDueOnly(id);
-        if (oldDue > 0) {
+        const netBalance = getCustomerNetBalance(id);
+        if (netBalance > 0) {
           prevDueAlert.style.display = 'flex';
-          prevDueVal.innerText = `₹ ${oldDue}`;
-          prevDueInput.value = oldDue;
+          prevDueVal.innerText = `₹ ${netBalance.toFixed(2)}`;
+          prevAdvanceAlert.style.display = 'none';
+          khataAdjustLabel.innerText = "पिछला बकाया जुड़ा (₹):";
+          prevAdjustInput.value = netBalance.toFixed(2);
+        } else if (netBalance < 0) {
+          const adv = Math.abs(netBalance);
+          prevAdvanceAlert.style.display = 'flex';
+          prevAdvanceVal.innerText = `₹ ${adv.toFixed(2)}`;
+          prevDueAlert.style.display = 'none';
+          khataAdjustLabel.innerText = "पिछला एडवांस (₹):";
+          prevAdjustInput.value = 0;
         } else {
           prevDueAlert.style.display = 'none';
-          prevDueInput.value = 0;
+          prevAdvanceAlert.style.display = 'none';
+          khataAdjustLabel.innerText = "खाता बकाया/जमा (₹):";
+          prevAdjustInput.value = 0;
         }
       } else {
         custName.value = '';
@@ -820,59 +1025,43 @@
         billAmount.value = '';
         priceBadge.innerHTML = '';
         prevDueAlert.style.display = 'none';
-        prevDueInput.value = 0;
+        prevAdvanceAlert.style.display = 'none';
+        khataAdjustLabel.innerText = "खाता बकाया/जमा (₹):";
+        prevAdjustInput.value = 0;
       }
       updateAndDraw();
     }
 
-    // =========================================================================
-    // ऑटो-नेक्स्ट ID के साथ फ़ील्ड्स रीसेट करना (1 के बाद ऑटो 2 आना)
-    // =========================================================================
     function resetBillingFields(suggestNext = true) {
       let targetId = '';
       const lastId = localStorage.getItem('smart_last_billed_id');
-      
       if (suggestNext && lastId && !isNaN(parseInt(lastId))) {
         targetId = (parseInt(lastId) + 1).toString();
       }
-
       custNumber.value = targetId;
       loadCustomerData(targetId);
-
-      // पेमेंट इनपुट्स हमेशा 0
       cashAmount.value = '0';
       onlineAmount.value = '0';
+      billNoteInput.value = '';
+      isAbsentMode = false;
+      remainingPendingMode = "DUE";
       setDefaultDateTime();
     }
 
-    // ID टाइप करने पर
-    custNumber.addEventListener('input', () => {
-      const id = custNumber.value.trim();
-      loadCustomerData(id);
-    });
+    custNumber.addEventListener('input', () => { loadCustomerData(custNumber.value.trim()); });
 
-    // ◀ पिछला ID बटन
     btnPrevId.addEventListener('click', () => {
-      let current = parseInt(custNumber.value.trim());
-      if (isNaN(current) || current <= 1) {
-        current = 1;
-      } else {
-        current -= 1;
-      }
-      custNumber.value = current;
-      loadCustomerData(current.toString());
+      let c = parseInt(custNumber.value.trim());
+      c = (isNaN(c) || c <= 1) ? 1 : c - 1;
+      custNumber.value = c;
+      loadCustomerData(c.toString());
     });
 
-    // ▶ अगला ID बटन
     btnNextId.addEventListener('click', () => {
-      let current = parseInt(custNumber.value.trim());
-      if (isNaN(current)) {
-        current = 1;
-      } else {
-        current += 1;
-      }
-      custNumber.value = current;
-      loadCustomerData(current.toString());
+      let c = parseInt(custNumber.value.trim());
+      c = isNaN(c) ? 1 : c + 1;
+      custNumber.value = c;
+      loadCustomerData(c.toString());
     });
 
     function unlockNameForEdit() {
@@ -886,7 +1075,6 @@
       }
     }
 
-    // नाम बदलने पर मास्टर में अपडेट
     custName.addEventListener('input', () => {
       const id = custNumber.value.trim();
       const name = custName.value.trim();
@@ -898,7 +1086,6 @@
       updateAndDraw();
     });
 
-    // बिल अमाउंट बदलने पर तय कीमत (Fixed Price) का लाइव अपडेट
     billAmount.addEventListener('input', () => {
       const id = custNumber.value.trim();
       const amt = parseFloat(billAmount.value);
@@ -908,37 +1095,115 @@
         saveMasterPrices(prices);
         priceBadge.innerHTML = `<span style="color:#f59e0b; font-size:0.72rem; font-weight:bold;">✏️ नया तय रेट: ₹${amt}</span>`;
       }
+      isAbsentMode = false;
       updateAndDraw();
     });
 
     btnSettleOldDue.addEventListener('click', () => {
-      const id = custNumber.value.trim();
-      const master = getMasterDirectory();
-      if (id && master[id]) {
-        custName.value = master[id];
-      }
       billAmount.value = 0;
-      cashAmount.value = prevDueInput.value;
+      cashAmount.value = prevAdjustInput.value;
       onlineAmount.value = 0;
+      isAbsentMode = false;
       updateAndDraw();
     });
 
-    dateTimeInput.addEventListener('input', updateAndDraw);
-    prevDueInput.addEventListener('input', updateAndDraw);
-    cashAmount.addEventListener('input', updateAndDraw);
-    onlineAmount.addEventListener('input', updateAndDraw);
+    btnApplyOldAdvance.addEventListener('click', () => {
+      const id = custNumber.value.trim();
+      const adv = Math.abs(getCustomerNetBalance(id));
+      const todayBill = parseFloat(billAmount.value) || 0;
+      
+      isAdvanceDeductionMode = true;
+      const deductible = Math.min(adv, todayBill);
+      prevAdjustInput.value = deductible;
+      khataAdjustLabel.innerText = "एडवांस से कटा (₹):";
 
-    // Shortcuts
+      const remainingPayable = Math.max(0, todayBill - deductible);
+      cashAmount.value = remainingPayable;
+      onlineAmount.value = 0;
+      isAbsentMode = false;
+      updateAndDraw();
+    });
+
+    btnChoiceChange.addEventListener('click', () => {
+      extraMode = "CHANGE";
+      updateExtraButtons();
+      updateAndDraw();
+    });
+
+    btnChoiceAdvance.addEventListener('click', () => {
+      extraMode = "ADVANCE";
+      updateExtraButtons();
+      updateAndDraw();
+    });
+
+    function updateExtraButtons() {
+      if (extraMode === "CHANGE") {
+        btnChoiceChange.className = "btn-choice active-change";
+        btnChoiceAdvance.className = "btn-choice";
+      } else {
+        btnChoiceAdvance.className = "btn-choice active-advance";
+        btnChoiceChange.className = "btn-choice";
+      }
+    }
+
+    btnRemainDue.addEventListener('click', () => {
+      remainingPendingMode = "DUE";
+      updateRemainingButtons();
+      updateAndDraw();
+    });
+
+    btnRemainWait.addEventListener('click', () => {
+      remainingPendingMode = "WAITING";
+      updateRemainingButtons();
+      updateAndDraw();
+    });
+
+    function updateRemainingButtons() {
+      if (remainingPendingMode === "DUE") {
+        btnRemainDue.className = "btn-remain-toggle active-due";
+        btnRemainWait.className = "btn-remain-toggle";
+      } else {
+        btnRemainWait.className = "btn-remain-toggle active-wait";
+        btnRemainDue.className = "btn-remain-toggle";
+      }
+    }
+
+    btnAbsent.addEventListener('click', () => {
+      isAbsentMode = true;
+      billAmount.value = '0';
+      cashAmount.value = '0';
+      onlineAmount.value = '0';
+      prevAdjustInput.value = '0';
+      billNoteInput.value = 'दुकान बंद / एब्सेंट';
+      updateAndDraw();
+    });
+
+    billNoteInput.addEventListener('input', updateAndDraw);
+    dateTimeInput.addEventListener('input', updateAndDraw);
+    prevAdjustInput.addEventListener('input', updateAndDraw);
+
+    cashAmount.addEventListener('input', () => {
+      if (parseFloat(cashAmount.value) > 0) isAbsentMode = false;
+      updateAndDraw();
+    });
+
+    onlineAmount.addEventListener('input', () => {
+      if (parseFloat(onlineAmount.value) > 0) isAbsentMode = false;
+      updateAndDraw();
+    });
+
     btnFullCash.addEventListener('click', () => {
-      const totalPayable = (parseFloat(billAmount.value) || 0) + (parseFloat(prevDueInput.value) || 0);
-      cashAmount.value = totalPayable;
+      isAbsentMode = false;
+      const calc = calculateKhata();
+      cashAmount.value = calc.netPayable;
       onlineAmount.value = 0;
       updateAndDraw();
     });
 
     btnFullOnline.addEventListener('click', () => {
-      const totalPayable = (parseFloat(billAmount.value) || 0) + (parseFloat(prevDueInput.value) || 0);
-      onlineAmount.value = totalPayable;
+      isAbsentMode = false;
+      const calc = calculateKhata();
+      onlineAmount.value = calc.netPayable;
       cashAmount.value = 0;
       updateAndDraw();
     });
@@ -946,53 +1211,120 @@
     btnClearRecv.addEventListener('click', () => {
       cashAmount.value = 0;
       onlineAmount.value = 0;
+      isAbsentMode = false;
       updateAndDraw();
     });
 
+    // =========================================================================
+    // कोर कैलकुलेशन
+    // =========================================================================
     function calculateKhata() {
       const todayBill = parseFloat(billAmount.value) || 0;
-      const oldDue = parseFloat(prevDueInput.value) || 0;
-      const totalPayable = todayBill + oldDue;
+      const adjustVal = parseFloat(prevAdjustInput.value) || 0;
+
+      let netPayable = todayBill;
+      if (isAdvanceDeductionMode) {
+        netPayable = Math.max(0, todayBill - adjustVal);
+      } else {
+        netPayable = todayBill + adjustVal;
+      }
 
       const cash = parseFloat(cashAmount.value) || 0;
       const online = parseFloat(onlineAmount.value) || 0;
-      
       const totalHandedOver = cash + online;
-      const diff = totalHandedOver - totalPayable;
+      const diff = totalHandedOver - netPayable;
 
       totalRecvLabel.innerText = `₹ ${totalHandedOver.toFixed(2)}`;
-      payableBadge.innerText = `कुल देनदारी: ₹${totalPayable}`;
+      
+      if (isAbsentMode) {
+        payableBadge.innerHTML = `<span style="color:#fca5a5;">🚫 एब्सेंट / दुकान बंद</span>`;
+      } else if (isAdvanceDeductionMode && adjustVal > 0) {
+        payableBadge.innerHTML = `बिल: <b>₹${todayBill}</b> <span style="color:#22d3ee;">(-₹${adjustVal})</span> = देना: <b>₹${netPayable}</b>`;
+      } else if (!isAdvanceDeductionMode && adjustVal > 0) {
+        payableBadge.innerHTML = `बिल: <b>₹${todayBill}</b> <span style="color:#f87171;">(+₹${adjustVal})</span> = देना: <b>₹${netPayable}</b>`;
+      } else {
+        payableBadge.innerHTML = `कुल बिल: <b>₹${todayBill}</b>`;
+      }
 
-      statusCard.classList.remove('card-change', 'card-due', 'card-exact');
+      statusCard.classList.remove('card-change', 'card-advance', 'card-due', 'card-waiting', 'card-absent', 'card-exact');
 
-      let statusType = "EXACT";
+      let due = 0;
+      let waitingAmount = 0;
+      let isWaiting = false;
+      let change = 0;
+      let advanceRetained = 0;
       let statusTextPhoto = "";
       let accentColor = "#38bdf8";
-      let due = 0;
-      let change = 0;
 
-      if (diff > 0) {
-        statusType = "CHANGE";
-        change = diff;
-        statusCard.classList.add('card-change');
-        statusTitle.innerText = "🔄 वापस करने हैं (Change):";
-        statusValue.innerText = `₹ ${diff.toFixed(2)}`;
-        statusTextPhoto = `🔄 Change: ₹${diff.toFixed(2)} (मिला: ₹${totalHandedOver})`;
-        accentColor = "#34d399";
-      } else if (diff < 0) {
-        statusType = "DUE";
-        due = Math.abs(diff);
-        statusCard.classList.add('card-due');
-        statusTitle.innerText = "⚠️ अब भी बाकी (Due):";
-        statusValue.innerText = `₹ ${due.toFixed(2)}`;
-        statusTextPhoto = `⚠️ Due: ₹${due.toFixed(2)} | Recv: ₹${totalHandedOver}`;
-        accentColor = "#f87171";
-      } else {
-        statusType = "EXACT";
+      if (isAbsentMode) {
+        statusCard.classList.add('card-absent');
+        statusTitle.innerText = "🚫 स्थिति:";
+        statusValue.innerText = "🚫 एब्सेंट / दुकान बंद (₹0 लेन-देन)";
+        statusTextPhoto = "🚫 एब्सेंट / दुकान बंद (₹0 लेन-देन)";
+        accentColor = "#94a3b8";
+        extraActionChoice.style.display = 'none';
+        remainingChoiceBox.style.display = 'none';
+      }
+      else if (diff < 0) {
+        extraActionChoice.style.display = 'none';
+        remainingChoiceBox.style.display = 'flex';
+        const pendingMoney = Math.abs(diff);
+
+        remainingQuestionText.innerText = `बाकी ₹${pendingMoney.toFixed(2)} को किसमें रखें?`;
+
+        if (remainingPendingMode === "WAITING") {
+          isWaiting = true;
+          waitingAmount = pendingMoney;
+          due = 0;
+          statusCard.classList.add('card-waiting');
+          statusTitle.innerText = "⏳ स्थिति:";
+          statusValue.innerText = `प्राप्त अभी: ₹${totalHandedOver} | ⏳ बाकी ₹${waitingAmount.toFixed(2)} UPI वेटिंग`;
+          statusTextPhoto = `🧾 बिल: ₹${todayBill} | प्राप्त: ₹${totalHandedOver} (💵${cash} 📱${online}) | ⏳ बाकी ₹${waitingAmount.toFixed(2)} UPI वेटिंग`;
+          accentColor = "#f59e0b";
+        } else {
+          isWaiting = false;
+          waitingAmount = 0;
+          due = pendingMoney;
+          statusCard.classList.add('card-due');
+          statusTitle.innerText = "⚠️ स्थिति:";
+          statusValue.innerText = `प्राप्त अभी: ₹${totalHandedOver} | ⚠️ बकाया: ₹${due.toFixed(2)}`;
+          statusTextPhoto = `🧾 बिल: ₹${todayBill} | प्राप्त: ₹${totalHandedOver} (💵${cash} 📱${online}) | ⚠️ Due: ₹${due.toFixed(2)}`;
+          accentColor = "#f87171";
+        }
+      }
+      else if (diff > 0) {
+        remainingChoiceBox.style.display = 'none';
+        extraActionChoice.style.display = 'flex';
+        if (extraMode === "CHANGE") {
+          change = diff;
+          advanceRetained = 0;
+          statusCard.classList.add('card-change');
+          statusTitle.innerText = "🔄 वापस करने हैं (Change):";
+          statusValue.innerText = `₹ ${diff.toFixed(2)}`;
+          statusTextPhoto = `🔄 Change वापस: ₹${diff.toFixed(2)} (मिला: ₹${totalHandedOver})`;
+          accentColor = "#34d399";
+        } else {
+          change = 0;
+          advanceRetained = diff;
+          statusCard.classList.add('card-advance');
+          statusTitle.innerText = "📥 खाते में जमा (Advance):";
+          statusValue.innerText = `+ ₹ ${diff.toFixed(2)}`;
+          statusTextPhoto = `📥 एडवांस जमा (छुट्टा नहीं था): ₹${diff.toFixed(2)}`;
+          accentColor = "#22d3ee";
+        }
+      }
+      else {
+        remainingChoiceBox.style.display = 'none';
+        extraActionChoice.style.display = 'none';
         statusCard.classList.add('card-exact');
         statusTitle.innerText = "भुगतान स्थिति:";
-        statusValue.innerText = "✅ पूरा भुगतान (₹ 0 बाकी)";
-        statusTextPhoto = `✅ Paid in Full (₹${totalHandedOver})`;
+        if (isAdvanceDeductionMode && adjustVal > 0) {
+          statusValue.innerText = `✅ पूरा चुकता (₹${adjustVal} एडवांस + ₹${totalHandedOver} प्राप्त)`;
+          statusTextPhoto = `✅ पूरा चुकता (₹${todayBill} बिल = ₹${adjustVal} एडवांस + ₹${totalHandedOver} प्राप्त)`;
+        } else {
+          statusValue.innerText = "✅ पूरा भुगतान (₹ 0 बाकी)";
+          statusTextPhoto = `✅ Paid in Full (₹${totalHandedOver})`;
+        }
         accentColor = "#38bdf8";
       }
 
@@ -1000,14 +1332,19 @@
 
       return {
         todayBill,
-        oldDue,
-        totalPayable,
+        adjustVal,
+        netPayable,
+        isAdvanceDeductionMode,
+        isWaiting,
+        waitingAmount,
+        isAbsent: isAbsentMode,
         cash,
         netCash,
         online,
         totalHandedOver,
         due,
         change,
+        advanceRetained,
         statusTextPhoto,
         accentColor
       };
@@ -1017,10 +1354,12 @@
       canvas.width = video.videoWidth || 640;
       canvas.height = video.videoHeight || 480;
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
       capturedImage = new Image();
       capturedImage.src = canvas.toDataURL('image/png');
-      capturedImage.onload = () => showEditMode();
+      capturedImage.onload = () => {
+        stopCamera();
+        showEditMode();
+      };
     });
 
     fileInput.addEventListener('change', (e) => {
@@ -1031,6 +1370,7 @@
           capturedImage = new Image();
           capturedImage.src = event.target.result;
           capturedImage.onload = () => {
+            stopCamera();
             canvas.width = capturedImage.width;
             canvas.height = capturedImage.height;
             showEditMode();
@@ -1046,8 +1386,7 @@
       captureBtn.style.display = 'none';
       document.querySelectorAll('.or-divider, label[for="fileInput"]').forEach(el => el.style.display = 'none');
       inputsContainer.style.display = 'flex';
-      
-      resetBillingFields(true); // ऑटो अगला नंबर लोड करें
+      resetBillingFields(true);
       updateAndDraw();
     }
 
@@ -1063,6 +1402,7 @@
       const name = custName.value.trim();
       const num = custNumber.value.trim();
       const dtValue = dateTimeInput.value;
+      const note = billNoteInput.value.trim();
 
       let formattedDate = "";
       if (dtValue) {
@@ -1076,7 +1416,9 @@
       const fontSize = Math.max(13, Math.floor(canvas.width * 0.031));
       const lineHeight = fontSize * 1.42;
       const padding = canvas.width * 0.025;
-      const stripHeight = (lineHeight * 4) + (padding * 2);
+      
+      const linesCount = note ? 5 : 4;
+      const stripHeight = (lineHeight * linesCount) + (padding * 2);
 
       ctx.fillStyle = "rgba(11, 19, 41, 0.92)";
       ctx.fillRect(0, canvas.height - stripHeight, canvas.width, stripHeight);
@@ -1100,34 +1442,41 @@
 
       textY += lineHeight;
       ctx.fillStyle = "#e2e8f0";
-      let billDetailsStr = `🧾 Bill: ₹${calc.todayBill}`;
-      if (calc.oldDue > 0) billDetailsStr += ` + पिछला: ₹${calc.oldDue}`;
-      billDetailsStr += ` | Recv: ₹${calc.totalHandedOver} (💵${calc.cash} 📱${calc.online})`;
+      let billDetailsStr = "";
+      if (calc.isAbsent) {
+        billDetailsStr = `🧾 बिल: ₹0 | 🚫 स्थिति: एब्सेंट (दुकान बंद / ₹0 प्राप्त)`;
+      } else if (calc.isWaiting) {
+        billDetailsStr = `🧾 कुल बिल: ₹${calc.todayBill} | प्राप्त अभी: ₹${calc.totalHandedOver} (💵${calc.cash} 📱${calc.online}) | ⏳ बाकी: ₹${calc.waitingAmount}`;
+      } else if (calc.isAdvanceDeductionMode && calc.adjustVal > 0) {
+        billDetailsStr = `🧾 कुल बिल: ₹${calc.todayBill} | 📥 एडवांस कटा: -₹${calc.adjustVal} | 💵 प्राप्त: ₹${calc.totalHandedOver}`;
+      } else if (!calc.isAdvanceDeductionMode && calc.adjustVal > 0) {
+        billDetailsStr = `🧾 नया बिल: ₹${calc.todayBill} + पिछला बकाया: ₹${calc.adjustVal} | 💵 प्राप्त: ₹${calc.totalHandedOver}`;
+      } else {
+        billDetailsStr = `🧾 कुल बिल: ₹${calc.todayBill} | 💵 प्राप्त: ₹${calc.totalHandedOver} (💵${calc.cash} 📱${calc.online})`;
+      }
       ctx.fillText(billDetailsStr, padding, textY);
 
       textY += lineHeight;
       ctx.fillStyle = calc.accentColor;
       ctx.fillText(calc.statusTextPhoto, padding, textY);
+
+      if (note) {
+        textY += lineHeight;
+        ctx.fillStyle = "#fbbf24";
+        ctx.fillText(`📝 नोट: ${note}`, padding, textY);
+      }
     }
 
-    // =========================================================================
-    // डाउनलोड और तय कीमत + लास्ट ID सेविंग
-    // =========================================================================
     downloadBtn.addEventListener('click', () => {
       const calc = calculateKhata();
       drawOnCanvas(calc);
 
       const finalNum = custNumber.value.trim();
       let finalName = custName.value.trim();
-
       const master = getMasterDirectory();
       const prices = getMasterPrices();
 
-      if (!finalName && finalNum && master[finalNum]) {
-        finalName = master[finalNum];
-      }
-
-      // नाम और तय कीमत को हमेशा के लिए मेमोरी में लॉक करना
+      if (!finalName && finalNum && master[finalNum]) finalName = master[finalNum];
       if (finalNum) {
         if (finalName && !finalName.startsWith('Customer-')) {
           master[finalNum] = finalName;
@@ -1137,19 +1486,15 @@
           prices[finalNum] = calc.todayBill;
           saveMasterPrices(prices);
         }
-        // अंतिम बिल किया गया नंबर याद रखें (अगले नंबर के लिए)
         localStorage.setItem('smart_last_billed_id', finalNum);
       }
-
       if (!finalName) finalName = 'Customer';
 
-      // 1. Download Photo
       const link = document.createElement('a');
       link.download = `Bill_${finalName}_${Date.now()}.png`;
       link.href = canvas.toDataURL('image/png', 1.0);
       link.click();
 
-      // 2. Save into History
       const dtValue = dateTimeInput.value ? new Date(dateTimeInput.value) : new Date();
       const dateString = dtValue.toISOString().split('T')[0];
       const timeString = dtValue.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
@@ -1161,16 +1506,25 @@
         name: finalName,
         number: finalNum,
         todayBill: calc.todayBill,
-        oldDue: calc.oldDue,
-        totalPayable: calc.totalPayable,
-        settledOldDue: Math.min(calc.oldDue, calc.totalHandedOver),
+        adjustVal: calc.adjustVal,
+        isAdvanceDeduction: calc.isAdvanceDeductionMode,
+        netPayable: calc.netPayable,
         cashGiven: calc.cash,
         onlineGiven: calc.online,
+        initialOnline: calc.online,
+        laterOnline: 0,
         totalHandedOver: calc.totalHandedOver,
         netCash: calc.netCash,
         online: calc.online,
+        isWaitingUPI: calc.isWaiting,
+        waitingAmount: calc.waitingAmount,
+        isWaitingCancelled: false,           // 🎯 रद्द वेटिंग फ्लैग
+        cancelledWaitingAmount: 0,
+        isAbsent: calc.isAbsent,
         due: calc.due,
-        change: calc.change
+        change: calc.change,
+        advanceRetained: calc.advanceRetained,
+        note: billNoteInput.value.trim()
       };
 
       const records = getBillingRecords();
@@ -1178,15 +1532,10 @@
       saveBillingRecords(records);
 
       downloadBtn.innerText = "✅ डाउनलोड हो गया!";
-      setTimeout(() => {
-        downloadBtn.innerText = "⬇️ Save & Download Photo";
-      }, 2000);
+      setTimeout(() => { downloadBtn.innerText = "⬇️ Save & Download Photo"; }, 2000);
 
-      // अगर ऑटो-नेक्स्ट ऑन है तो सीधे अगले नंबर के लिए कैमरा खुलेगा
       if (autoNextBillToggle.checked) {
-        setTimeout(() => {
-          resetToCamera();
-        }, 1200);
+        setTimeout(() => { resetToCamera(); }, 1200);
       }
     });
 
@@ -1196,15 +1545,54 @@
       captureBtn.style.display = 'block';
       document.querySelectorAll('.or-divider, label[for="fileInput"]').forEach(el => el.style.display = 'block');
       inputsContainer.style.display = 'none';
-      resetBillingFields(true); // ऑटो +1 नंबर तैयार रखे
+      resetBillingFields(true);
+      startCamera();
     }
 
-    retakeBtn.addEventListener('click', () => {
-      resetToCamera();
-    });
+    retakeBtn.addEventListener('click', () => { resetToCamera(); });
+
+    // ⚡ जब बाकी UPI आ जाए: 1-क्लिक कंफर्म
+    window.confirmUpiPayment = function(id) {
+      let records = getBillingRecords();
+      const bill = records.find(r => r.id === id);
+      if (bill) {
+        if (confirm(`क्या ₹${bill.waitingAmount} का बाकी UPI पेमेंट प्राप्त हो गया है?`)) {
+          bill.laterOnline = bill.waitingAmount;
+          bill.online = (bill.online || 0) + bill.waitingAmount;
+          bill.waitingAmount = 0;
+          bill.isWaitingUPI = false;
+          saveBillingRecords(records);
+          alert("✅ पेमेंट कंफर्म हो गया! 1st UPI और 2nd UPI दोनों का ब्रेकअप दर्ज हो गया।");
+        }
+      }
+    };
 
     // =========================================================================
-    // 3. DASHBOARD RENDER
+    // 🎯 NEW: जब UPI न आए तो उधारी (Due) में ट्रांसफर करना और रद्द मार्क करना
+    // =========================================================================
+    window.transferWaitingToDue = function(id) {
+      let records = getBillingRecords();
+      const bill = records.find(r => r.id === id);
+      if (bill) {
+        const amt = bill.waitingAmount || 0;
+        if (confirm(`क्या ग्राहक (${bill.name}) ने ₹${amt} का UPI नहीं भेजा?\n\nइसे रद्द करके ग्राहक के उधारी (Due) खाते में ट्रांसफर करें?`)) {
+          bill.isWaitingCancelled = true;
+          bill.cancelledWaitingAmount = amt;
+          bill.due = (bill.due || 0) + amt; // उधारी में जुड़ गया
+          bill.waitingAmount = 0;
+          bill.isWaitingUPI = false;
+          
+          const reasonStr = `UPI ₹${amt} नहीं आया (उधारी में ट्रांसफर किया)`;
+          bill.note = bill.note ? (bill.note + ' • ' + reasonStr) : reasonStr;
+          
+          saveBillingRecords(records);
+          alert(`✅ ₹${amt} सफलतापूर्वक ग्राहक के उधारी (Due) में जुड़ गया!\nयह वेटिंग लिस्ट में रद्द बिल की तरह दिखेगा।`);
+        }
+      }
+    };
+
+    // =========================================================================
+    // डैशबोर्ड रेंडर
     // =========================================================================
     function renderDashboard() {
       const allRecords = getBillingRecords();
@@ -1214,126 +1602,365 @@
       if (currentFilterMode === "TODAY") {
         filtered = allRecords.filter(r => r.date === todayString);
       } else if (currentFilterMode === "CUSTOM") {
-        const selectedDate = customDatePicker.value;
-        filtered = allRecords.filter(r => r.date === selectedDate);
+        filtered = allRecords.filter(r => r.date === customDatePicker.value);
       } else {
         filtered = allRecords;
       }
 
-      let totalCash = 0;
-      let totalOnline = 0;
-      let grandTotal = 0;
-
+      let totalCash = 0, totalOnline = 0, grandTotal = 0, totalWaiting = 0, totalAbsent = 0;
       filtered.forEach(r => {
-        const c = (r.netCash !== undefined) ? r.netCash : (r.cashGiven !== undefined ? r.cashGiven : 0);
-        const o = (r.online !== undefined) ? r.online : (r.onlineGiven !== undefined ? r.onlineGiven : 0);
+        const c = (r.netCash !== undefined) ? r.netCash : 0;
+        const o = (r.online !== undefined) ? r.online : 0;
         totalCash += c;
         totalOnline += o;
         grandTotal += (c + o);
+        // केवल सक्रिय वेटिंग जोड़ें (रद्द वेटिंग नहीं जुड़ेगी)
+        if (r.isWaitingUPI && !r.isWaitingCancelled) {
+          totalWaiting += (r.waitingAmount || 0);
+        }
+        if (r.isAbsent) totalAbsent += 1;
       });
 
       let displayDue = 0;
-
-      if (currentFilterMode === "TODAY") {
-        dashDueLabel.innerText = "⚠️ आज का बकाया (Today)";
-        filtered.forEach(r => {
-          displayDue += (r.due || 0);
-        });
-      } else if (currentFilterMode === "CUSTOM") {
-        dashDueLabel.innerText = "⚠️ इस तारीख का बकाया";
-        filtered.forEach(r => {
-          displayDue += (r.due || 0);
-        });
+      if (currentFilterMode === "TODAY" || currentFilterMode === "CUSTOM") {
+        dashDueLabel.innerText = "⚠️ आज का बकाया";
+        filtered.forEach(r => { displayDue += (r.due || 0); });
       } else {
-        dashDueLabel.innerText = "⚠️ कुल बाकी (Total Outstanding)";
-        const checkedCustomers = new Set();
+        dashDueLabel.innerText = "⚠️ कुल बाकी (Outstanding)";
+        const checked = new Set();
         allRecords.forEach(r => {
-          if (r.number && !checkedCustomers.has(r.number)) {
-            displayDue += getCustomerDueOnly(r.number);
-            checkedCustomers.add(r.number);
-          } else if (!r.number) {
-            displayDue += (r.due || 0);
+          if (r.number && !checked.has(r.number)) {
+            const bal = getCustomerNetBalance(r.number);
+            if (bal > 0) displayDue += bal;
+            checked.add(r.number);
           }
         });
       }
+
+      let totalAdvanceHeld = 0;
+      const advanceCustomerList = [];
+      const dueCustomerList = [];
+      // 🎯 वेटिंग लिस्ट में एक्टिव पेंडिंग और रद्द (ट्रांसफर किए हुए) दोनों दिखेंगे
+      const waitingBillsList = allRecords.filter(r => (r.isWaitingUPI === true && r.waitingAmount > 0) || r.isWaitingCancelled === true);
+      const activeWaitingCount = allRecords.filter(r => r.isWaitingUPI === true && r.waitingAmount > 0).length;
+      const absentBillsList = filtered.filter(r => r.isAbsent === true);
+      const checkedCust = new Set();
+
+      allRecords.forEach(r => {
+        if (r.number && !checkedCust.has(r.number)) {
+          const bal = getCustomerNetBalance(r.number);
+          if (bal < 0) {
+            totalAdvanceHeld += Math.abs(bal);
+            advanceCustomerList.push({ number: r.number, name: r.name, advance: Math.abs(bal), lastDate: r.date });
+          } else if (bal > 0) {
+            dueCustomerList.push({ number: r.number, name: r.name, due: bal, lastDate: r.date });
+          }
+          checkedCust.add(r.number);
+        }
+      });
 
       dashTotalCash.innerText = `₹ ${totalCash.toFixed(2)}`;
       dashTotalOnline.innerText = `₹ ${totalOnline.toFixed(2)}`;
       dashGrandTotal.innerText = `₹ ${grandTotal.toFixed(2)}`;
       dashTotalDue.innerText = `₹ ${displayDue.toFixed(2)}`;
-      historyCount.innerText = filtered.length;
+      dashTotalWaiting.innerText = `₹ ${totalWaiting.toFixed(2)}`;
+      dashTotalAbsent.innerText = `${totalAbsent}`;
+      dashTotalAdvance.innerText = `₹ ${totalAdvanceHeld.toFixed(2)}`;
+
+      countWaiting.innerText = activeWaitingCount;
+      countAdvanceCust.innerText = advanceCustomerList.length;
+      countDueCust.innerText = dueCustomerList.length;
+      countAbsent.innerText = absentBillsList.length;
 
       historyList.innerHTML = '';
-      if (filtered.length === 0) {
-        historyList.innerHTML = `<div style="text-align:center; color:#64748b; font-size:0.85rem; padding:15px;">कोई लेन-देन नहीं मिला</div>`;
-        return;
-      }
 
-      filtered.forEach(r => {
-        const item = document.createElement('div');
-        item.className = 'history-item';
-
-        const billVal = r.todayBill !== undefined ? r.todayBill : (r.bill || 0);
-        const oldDueVal = r.oldDue || 0;
-        const totalBillVal = r.totalPayable !== undefined ? r.totalPayable : (billVal + oldDueVal);
-        
-        const dueVal = r.due || 0;
-        const changeVal = r.change || 0;
-
-        const actualCash = (r.cashGiven !== undefined) ? r.cashGiven : (r.netCash !== undefined ? r.netCash : 0);
-        const actualOnline = (r.onlineGiven !== undefined) ? r.onlineGiven : (r.online !== undefined ? r.online : 0);
-        
-        let totalGiven = r.totalHandedOver;
-        if (totalGiven === undefined) {
-          totalGiven = actualCash + actualOnline;
+      // 1. एब्सेंट लिस्ट टैब
+      if (currentViewTab === "ABSENT") {
+        listSectionTitle.innerHTML = `🚫 एब्सेंट / दुकान बंद लिस्ट (${absentBillsList.length} ग्राहक)`;
+        if (absentBillsList.length === 0) {
+          historyList.innerHTML = `<div style="text-align:center; color:#64748b; font-size:0.85rem; padding:15px;">कोई ग्राहक एब्सेंट नहीं है।</div>`;
+          return;
         }
-
-        let paymentBadge = '';
-        if (actualCash > 0 && actualOnline > 0) {
-          paymentBadge = `<span class="h-badge h-badge-split">💰 कुल दिया: ₹${totalGiven}</span>`;
-        } else if (actualOnline > 0 && actualCash === 0) {
-          paymentBadge = `<span class="h-badge h-badge-online">📱 UPI प्राप्त: ₹${actualOnline}</span>`;
-        } else if (actualCash > 0 && actualOnline === 0) {
-          paymentBadge = `<span class="h-badge h-badge-cash">💵 कैश प्राप्त: ₹${actualCash}</span>`;
-        } else {
-          paymentBadge = `<span class="h-badge h-badge-bill">प्राप्त: ₹0</span>`;
-        }
-
-        let statusBadge = '';
-        if (changeVal > 0) {
-          statusBadge = `<span class="h-badge h-badge-change">🔄 वापस (माइनस): ₹${changeVal}</span>`;
-        } else if (dueVal > 0) {
-          statusBadge = `<span class="h-badge h-badge-due">⚠️ बाकी: ₹${dueVal}</span>`;
-        } else {
-          statusBadge = `<span class="h-badge h-badge-paid">✅ पूरा भुगतान</span>`;
-        }
-
-        let subTextHtml = `जमा हुआ: ₹${totalGiven} (💵 कैश: ₹${actualCash} | 📱 ऑनलाइन: ₹${actualOnline})`;
-        if (changeVal > 0) {
-          subTextHtml = `गल्ले में शुद्ध जमा: ₹${actualCash - changeVal} (💵 कैश: ₹${actualCash} में से ₹${changeVal} वापस | 📱 ऑनलाइन: ₹${actualOnline})`;
-        }
-
-        item.innerHTML = `
-          <div class="history-top">
-            <div>
-              <span class="history-cust-title">👤 ${r.name} ${r.number ? `(${r.number})` : ''}</span>
-              <div class="history-time">📅 ${r.date} ${r.time}</div>
+        absentBillsList.forEach(r => {
+          const item = document.createElement('div');
+          item.className = 'history-item';
+          item.innerHTML = `
+            <div class="history-top">
+              <div>
+                <span class="history-cust-title">👤 ${r.name} (ID: ${r.number})</span>
+                <div class="history-time">📅 ${r.date} ${r.time}</div>
+              </div>
+              <button class="btn-del" onclick="deleteRecord(${r.id})" title="हटाएं">❌</button>
             </div>
-            <button class="btn-del" onclick="deleteRecord(${r.id})" title="हटाएं">❌</button>
-          </div>
+            <div class="history-badges-row">
+              <span class="h-badge h-badge-absent">🚫 एब्सेंट / दुकान बंद</span>
+              <span class="h-badge h-badge-bill">🧾 बिल: ₹0</span>
+            </div>
+            <div class="history-sub-text">
+              <span class="history-note-text">📝 नोट: ${r.note || 'दुकान बंद थी'}</span>
+            </div>
+          `;
+          historyList.appendChild(item);
+        });
+      }
+      // 2. 🎯 वेटिंग लिस्ट टैब (सक्रिय + रद्द / उधारी में ट्रांसफर दोनों दिखेंगे)
+      else if (currentViewTab === "WAITING") {
+        listSectionTitle.innerHTML = `⏳ UPI वेटिंग बिल लिस्ट (${activeWaitingCount} पेंडिंग, ${waitingBillsList.length - activeWaitingCount} रद्द)`;
+        if (waitingBillsList.length === 0) {
+          historyList.innerHTML = `<div style="text-align:center; color:#64748b; font-size:0.85rem; padding:15px;">कोई UPI वेटिंग में नहीं है। सब चुकता है!</div>`;
+          return;
+        }
+        waitingBillsList.forEach(r => {
+          const item = document.createElement('div');
+          item.className = 'history-item';
 
-          <div class="history-badges-row">
-            <span class="h-badge h-badge-bill">🧾 कुल बिल: ₹${totalBillVal}</span>
-            ${paymentBadge}
-            ${statusBadge}
-          </div>
+          const actualCash = (r.cashGiven !== undefined) ? r.cashGiven : (r.netCash || 0);
+          const actualOnline = (r.initialOnline !== undefined) ? r.initialOnline : (r.onlineGiven || 0);
 
-          <div class="history-sub-text">
-            <span>${subTextHtml}</span>
-          </div>
-        `;
-        historyList.appendChild(item);
-      });
+          let paymentBadges = '';
+          if (actualCash > 0) paymentBadges += `<span class="h-badge h-badge-cash">💵 कैश मिला: ₹${actualCash}</span>`;
+          if (actualOnline > 0) paymentBadges += `<span class="h-badge h-badge-online">📱 1st UPI: ₹${actualOnline}</span>`;
+
+          // अगर यह बिल रद्द होकर उधारी में ट्रांसफर हो चुका है
+          if (r.isWaitingCancelled) {
+            item.style.border = "1px dashed #ef4444";
+            item.style.background = "rgba(69, 10, 10, 0.4)";
+            item.innerHTML = `
+              <div class="history-top">
+                <div>
+                  <span class="history-cust-title">👤 ${r.name} (ID: ${r.number})</span>
+                  <div class="history-time">📅 ${r.date} ${r.time}</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:4px;">
+                  <span style="color:#fca5a5; font-size:0.75rem; font-weight:bold; border:1px solid #ef4444; padding:2px 6px; border-radius:4px;">🚫 रद्द (उधारी में ट्रांसफर)</span>
+                  <button class="btn-del" onclick="deleteRecord(${r.id})" title="हटाएं">❌</button>
+                </div>
+              </div>
+              <div class="history-badges-row">
+                <span class="h-badge h-badge-bill">🧾 कुल बिल: ₹${r.todayBill}</span>
+                ${paymentBadges}
+                <span class="h-badge h-badge-waiting" style="text-decoration: line-through; opacity: 0.65;">⏳ वेटिंग: ₹${r.cancelledWaitingAmount}</span>
+                <span class="h-badge h-badge-due">⚠️ उधारी में बदला: ₹${r.due}</span>
+              </div>
+              <div class="history-sub-text">
+                <span style="color:#fca5a5;">❌ ग्राहक ने UPI नहीं भेजा, अतः ₹${r.cancelledWaitingAmount} उधारी खाते में ट्रांसफर कर दिया गया।</span>
+                ${r.note ? `<span class="history-note-text">📝 नोट: ${r.note}</span>` : ''}
+              </div>
+            `;
+          } else {
+            // अभी एक्टिव पेंडिंग है (दोनों बटन उपलब्ध रहेंगे)
+            item.innerHTML = `
+              <div class="history-top">
+                <div>
+                  <span class="history-cust-title">👤 ${r.name} (ID: ${r.number})</span>
+                  <div class="history-time">📅 ${r.date} ${r.time}</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:2px;">
+                  <button class="btn-confirm-upi" onclick="confirmUpiPayment(${r.id})">✅ बाकी ₹${r.waitingAmount} आ गए</button>
+                  <button class="btn-transfer-due" onclick="transferWaitingToDue(${r.id})">⚠️ उधारी में डालें</button>
+                  <button class="btn-del" onclick="deleteRecord(${r.id})" title="हटाएं">❌</button>
+                </div>
+              </div>
+              <div class="history-badges-row">
+                <span class="h-badge h-badge-bill">🧾 कुल बिल: ₹${r.todayBill}</span>
+                ${paymentBadges}
+                <span class="h-badge h-badge-waiting">⏳ बाकी वेटिंग: ₹${r.waitingAmount}</span>
+              </div>
+              <div class="history-sub-text">
+                <span>अभी तक प्राप्त: ₹${actualCash + actualOnline} • बाकी बचा: ₹${r.waitingAmount} UPI आना शेष</span>
+                ${r.note ? `<span class="history-note-text">📝 नोट: ${r.note}</span>` : ''}
+              </div>
+            `;
+          }
+          historyList.appendChild(item);
+        });
+      }
+      // 3. एडवांस जमा लिस्ट टैब
+      else if (currentViewTab === "ADVANCE") {
+        listSectionTitle.innerHTML = `📥 एडवांस जमा ग्राहक लिस्ट (${advanceCustomerList.length} ग्राहक)`;
+        if (advanceCustomerList.length === 0) {
+          historyList.innerHTML = `<div style="text-align:center; color:#64748b; font-size:0.85rem; padding:15px;">किसी ग्राहक का एडवांस जमा नहीं है।</div>`;
+          return;
+        }
+        advanceCustomerList.forEach(c => {
+          const item = document.createElement('div');
+          item.className = 'history-item';
+          item.innerHTML = `
+            <div class="history-top">
+              <span class="history-cust-title">👤 ${c.name} (ID: ${c.number})</span>
+              <span class="h-badge h-badge-advance" style="font-size:0.88rem;">📥 जमा: ₹${c.advance.toFixed(2)}</span>
+            </div>
+            <div class="history-sub-text">
+              <span>अंतिम बिल तारीख: ${c.lastDate}</span>
+              <span style="color:#22d3ee; font-weight:bold;">अगले बिल पर ₹${c.advance.toFixed(2)} छूटेगा</span>
+            </div>
+          `;
+          historyList.appendChild(item);
+        });
+      }
+      // 4. बकाया लिस्ट टैब
+      else if (currentViewTab === "DUE") {
+        listSectionTitle.innerHTML = `⚠️ उधारी/बकाया ग्राहक लिस्ट (${dueCustomerList.length} ग्राहक)`;
+        if (dueCustomerList.length === 0) {
+          historyList.innerHTML = `<div style="text-align:center; color:#64748b; font-size:0.85rem; padding:15px;">किसी ग्राहक का बकाया नहीं है।</div>`;
+          return;
+        }
+        dueCustomerList.forEach(c => {
+          const item = document.createElement('div');
+          item.className = 'history-item';
+          item.innerHTML = `
+            <div class="history-top">
+              <span class="history-cust-title">👤 ${c.name} (ID: ${c.number})</span>
+              <span class="h-badge h-badge-due" style="font-size:0.88rem;">⚠️ बाकी: ₹${c.due.toFixed(2)}</span>
+            </div>
+            <div class="history-sub-text">
+              <span>अंतिम बिल तारीख: ${c.lastDate}</span>
+            </div>
+          `;
+          historyList.appendChild(item);
+        });
+      }
+      // 5. सभी बिल लिस्ट टैब (🎯 FIX: रद्द वेटिंग का साफ़-साफ़ कटा हुआ ब्रेकअप)
+      else {
+        listSectionTitle.innerHTML = `लेनदेन विवरण (${filtered.length} बिल)`;
+        historyCount.innerText = filtered.length;
+
+        if (filtered.length === 0) {
+          historyList.innerHTML = `<div style="text-align:center; color:#64748b; font-size:0.85rem; padding:15px;">कोई लेन-देन नहीं मिला</div>`;
+          return;
+        }
+
+        filtered.forEach(r => {
+          const item = document.createElement('div');
+          item.className = 'history-item';
+
+          const actualGrossBill = (r.todayBill !== undefined) ? r.todayBill : (r.bill || 0);
+          const adjustVal = r.adjustVal || 0;
+          const isAdv = r.isAdvanceDeduction;
+
+          const dueVal = r.due || 0;
+          const changeVal = r.change || 0;
+          const advRetained = r.advanceRetained || 0;
+
+          const actualCash = (r.cashGiven !== undefined) ? r.cashGiven : (r.netCash || 0);
+          const firstOnline = (r.initialOnline !== undefined) ? r.initialOnline : (r.onlineGiven || 0);
+          const secondOnline = r.laterOnline || 0;
+
+          // 1. बिल बैज
+          let billBadgesHtml = '';
+          if (r.isAbsent) {
+            billBadgesHtml = `
+              <span class="h-badge h-badge-absent">🚫 एब्सेंट / दुकान बंद</span>
+              <span class="h-badge h-badge-bill">🧾 बिल: ₹0</span>
+            `;
+          } else if (isAdv && adjustVal > 0) {
+            billBadgesHtml = `
+              <span class="h-badge h-badge-bill">🧾 कुल बिल: ₹${actualGrossBill}</span>
+              <span class="h-badge h-badge-deduct">📥 एडवांस कटा: -₹${adjustVal}</span>
+            `;
+          } else if (!isAdv && adjustVal > 0) {
+            billBadgesHtml = `
+              <span class="h-badge h-badge-bill">🧾 नया बिल: ₹${actualGrossBill}</span>
+              <span class="h-badge h-badge-due">⚠️ पुराना बकाया: +₹${adjustVal}</span>
+            `;
+          } else {
+            billBadgesHtml = `<span class="h-badge h-badge-bill">🧾 कुल बिल: ₹${actualGrossBill}</span>`;
+          }
+
+          // 2. भुगतान बैज
+          let paymentBadge = '';
+          if (r.isAbsent) {
+            paymentBadge = `<span class="h-badge h-badge-cash">💵 प्राप्त: ₹0</span>`;
+          } else {
+            if (actualCash > 0) {
+              paymentBadge += `<span class="h-badge h-badge-cash">💵 कैश: ₹${actualCash}</span> `;
+            }
+            if (firstOnline > 0) {
+              paymentBadge += `<span class="h-badge h-badge-online">📱 1st UPI: ₹${firstOnline}</span> `;
+            }
+            if (secondOnline > 0) {
+              paymentBadge += `<span class="h-badge h-badge-later-online">📱 2nd UPI (बाद में): ₹${secondOnline}</span> `;
+            }
+            if (actualCash === 0 && firstOnline === 0 && secondOnline === 0) {
+              paymentBadge = `<span class="h-badge h-badge-bill">प्राप्त: ₹0</span>`;
+            }
+          }
+
+          // 3. स्टेटस बैज (🎯 FIX: रद्द वेटिंग का कटा हुआ लुक)
+          let statusBadge = '';
+          if (r.isAbsent) {
+            statusBadge = `<span class="h-badge h-badge-absent">🚫 कोई लेन-देन नहीं</span>`;
+          } else if (r.isWaitingCancelled) {
+            statusBadge = `
+              <span class="h-badge h-badge-waiting" style="text-decoration: line-through; opacity: 0.65;">⏳ वेटिंग: ₹${r.cancelledWaitingAmount}</span>
+              <span class="h-badge h-badge-due">⚠️ बाकी (Due): ₹${r.due}</span>
+              <span class="h-badge" style="background:#450a0a; color:#fca5a5; border:1px solid #ef4444;">❌ रद्द वेटिंग</span>
+            `;
+          } else if (r.isWaitingUPI) {
+            statusBadge = `
+              <span class="h-badge h-badge-waiting">⏳ बाकी वेटिंग: ₹${r.waitingAmount}</span>
+              <button class="btn-confirm-upi" onclick="confirmUpiPayment(${r.id})">✅ बाकी ₹${r.waitingAmount} आ गए</button>
+              <button class="btn-transfer-due" onclick="transferWaitingToDue(${r.id})">⚠️ उधारी में डालें</button>
+            `;
+          } else if (advRetained > 0) {
+            statusBadge = `<span class="h-badge h-badge-advance">📥 एडवांस जमा: +₹${advRetained}</span>`;
+          } else if (changeVal > 0) {
+            statusBadge = `<span class="h-badge h-badge-change">🔄 वापस (माइनस): ₹${changeVal}</span>`;
+          } else if (dueVal > 0) {
+            statusBadge = `<span class="h-badge h-badge-due">⚠️ बाकी (Due): ₹${dueVal}</span>`;
+          } else {
+            statusBadge = `<span class="h-badge h-badge-paid">✅ पूरा भुगतान</span>`;
+          }
+
+          // 4. सबटेक्स्ट स्पष्टीकरण
+          let subTextHtml = '';
+          if (r.isAbsent) {
+            subTextHtml = `आज ग्राहक अनुपस्थित था / दुकान बंद थी।`;
+          } else if (r.isWaitingCancelled) {
+            subTextHtml = `गल्ले में शुद्ध जमा: ₹${r.netCash + r.online} (💵 कैश: ₹${actualCash}) • ⚠️ ₹${r.cancelledWaitingAmount} UPI समय पर न आने के कारण उधारी खाते में जोड़ा गया`;
+          } else if (r.isWaitingUPI) {
+            subTextHtml = `गल्ले/बैंक में अभी जमा: ₹${r.netCash + r.online} (💵 कैश: ₹${actualCash} | 📱 1st UPI मिला: ₹${firstOnline} | ⏳ ₹${r.waitingAmount} UPI आना बाकी)`;
+          } else if (secondOnline > 0) {
+            subTextHtml = `गल्ले/बैंक में कुल जमा: ₹${r.netCash + r.online} (💵 कैश: ₹${actualCash} + 📱 1st UPI: ₹${firstOnline} + 📱 2nd UPI: ₹${secondOnline} बाद में प्राप्त)`;
+          } else {
+            subTextHtml = `गल्ले/बैंक में कुल जमा: ₹${r.netCash + r.online} (💵 कैश: ₹${r.netCash} | 📱 ऑनलाइन: ₹${r.online})`;
+          }
+
+          item.innerHTML = `
+            <div class="history-top">
+              <div>
+                <span class="history-cust-title">👤 ${r.name} ${r.number ? `(${r.number})` : ''}</span>
+                <div class="history-time">📅 ${r.date} ${r.time}</div>
+              </div>
+              <button class="btn-del" onclick="deleteRecord(${r.id})" title="हटाएं">❌</button>
+            </div>
+
+            <div class="history-badges-row">
+              ${billBadgesHtml}
+              ${paymentBadge}
+              ${statusBadge}
+            </div>
+
+            <div class="history-sub-text">
+              <span>${subTextHtml}</span>
+              ${r.note ? `<span class="history-note-text">📝 नोट: ${r.note}</span>` : ''}
+            </div>
+          `;
+          historyList.appendChild(item);
+        });
+      }
+    }
+
+    tabAllBills.addEventListener('click', () => { currentViewTab = "BILLS"; setActiveTab(tabAllBills); });
+    tabWaitingList.addEventListener('click', () => { currentViewTab = "WAITING"; setActiveTab(tabWaitingList); });
+    tabAdvanceList.addEventListener('click', () => { currentViewTab = "ADVANCE"; setActiveTab(tabAdvanceList); });
+    tabDueList.addEventListener('click', () => { currentViewTab = "DUE"; setActiveTab(tabDueList); });
+    tabAbsentList.addEventListener('click', () => { currentViewTab = "ABSENT"; setActiveTab(tabAbsentList); });
+
+    function setActiveTab(activeEl) {
+      [tabAllBills, tabWaitingList, tabAdvanceList, tabDueList, tabAbsentList].forEach(el => el.className = "view-tab");
+      activeEl.className = "view-tab active";
+      renderDashboard();
     }
 
     window.deleteRecord = function(id) {
